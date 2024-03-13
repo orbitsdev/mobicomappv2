@@ -7,12 +7,14 @@ import 'package:mobicom/controllers/auth_controller.dart';
 import 'package:mobicom/features/authentication/login_screen.dart';
 import 'package:mobicom/features/authentication/register_screen.dart';
 import 'package:mobicom/features/chapters/chapter_screen.dart';
+import 'package:mobicom/features/chapters/lessson_screen.dart';
 import 'package:mobicom/features/exercises/exercises_screen.dart';
+import 'package:mobicom/features/home_screen.dart';
 import 'package:mobicom/middleware/auth_middleware.dart';
 import 'package:mobicom/middleware/not_login_middleware.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-Future<void> main() async{ 
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
@@ -24,26 +26,23 @@ Future<void> main() async{
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({ Key? key }) : super(key: key);
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   _MyAppState createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
-
   var authcontroller = Get.find<AuthController>();
   @override
   void initState() {
-      testStorage();
+    testStorage();
     super.initState();
   }
 
-  void testStorage() async{
-
-     final SharedPreferences prefs = await SharedPreferences.getInstance();
-     await prefs.setString('action', 'Start');
-
+  void testStorage() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('action', 'Start');
   }
 
   @override
@@ -52,28 +51,53 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       title: 'GATE APP',
       theme: ThemeData(useMaterial3: true),
-       initialRoute: RegisterScreen.name,
+     themeMode: ThemeMode.dark,
+      darkTheme: ThemeData.dark().copyWith(
+        // Customize the dark theme colors here
+        scaffoldBackgroundColor: Colors.black45, // Very dark blue
+        appBarTheme: AppBarTheme(
+          backgroundColor: Colors.black, // Darker blue
+        ),
+        bottomNavigationBarTheme: BottomNavigationBarThemeData(
+          backgroundColor: Colors.black, // Darker blue
+        ),
+      ),
+      initialRoute: HomeScreen.name,
       getPages: [
-        GetPage(name: LoginScreen.name, page: ()=> LoginScreen(),
-        middlewares: [
-         NotLoginMiddleware(),
-        ]
-        ),
-        GetPage(name: RegisterScreen.name, page: ()=>  RegisterScreen(),
-        middlewares: [
-           AuthMiddleware()
-        ]
-        ),
-        GetPage(name: ExercisesScreen.name, page: ()=> ExercisesScreen(),
-        middlewares: [
-          AuthMiddleware()
-        ]
-        ),
-        GetPage(name: ChapterScreen.name, page: ()=> ChapterScreen(),
-        middlewares: [
-          AuthMiddleware()
-        ]
-        ),
+        GetPage(name: HomeScreen.name, page: () => HomeScreen(), middlewares: [
+          //  NotLoginMiddleware(),
+        ]),
+        GetPage(
+            name: LoginScreen.name,
+            page: () => LoginScreen(),
+            transition: Transition.cupertino,
+            middlewares: [
+              NotLoginMiddleware(),
+            ]),
+        GetPage(
+            name: RegisterScreen.name,
+            page: () => RegisterScreen(),
+                        transition: Transition.cupertino,
+            middlewares: [AuthMiddleware()]),
+        GetPage(
+            name: ExercisesScreen.name,
+            page: () => ExercisesScreen(),
+                        transition: Transition.cupertino,
+            middlewares: [AuthMiddleware()]),
+        GetPage(
+            name: ChapterScreen.name,
+            page: () => ChapterScreen(),
+                        transition: Transition.cupertino,
+            middlewares: [AuthMiddleware()
+          ]
+          ),
+        GetPage(
+            name: LesssonScreen.name,
+            page: () => LesssonScreen(),
+                        transition: Transition.cupertino,
+            middlewares: [AuthMiddleware()
+          ]
+          ),
       ],
     );
   }
