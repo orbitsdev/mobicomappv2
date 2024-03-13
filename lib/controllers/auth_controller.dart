@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 
 import 'package:mobicom/constant/typdef.dart';
 import 'package:mobicom/features/exercises/exercises_screen.dart';
+import 'package:mobicom/features/home_screen.dart';
 import 'package:mobicom/modals/dialogs.dart';
 import 'package:mobicom/models/user.dart';
 import 'package:http/http.dart' as http;
@@ -44,9 +45,12 @@ class AuthController extends GetxController {
        print(user.toJson());
         await  prefs.setString('user', user.toJson());
         String? new_user = prefs.getString('user');
+     
 
+     if(user.value.first_name!.isNotEmpty){
+        Get.offAll(()=> HomeScreen(), transition: Transition.cupertino);
+     }
 
-        Get.offAll(ExercisesScreen())
 
 
      
