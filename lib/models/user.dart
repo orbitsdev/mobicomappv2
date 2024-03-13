@@ -1,7 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
-
 class User {
  int? id;
  String? first_name;
@@ -10,6 +9,7 @@ class User {
  String? image;
  String? created_at;
  String? updated_at;
+ String? token;
  
   User({
     this.id,
@@ -19,8 +19,9 @@ class User {
     this.image,
     this.created_at,
     this.updated_at,
+    this.token,
   });
-
+ 
 
   User copyWith({
     int? id,
@@ -30,6 +31,7 @@ class User {
     String? image,
     String? created_at,
     String? updated_at,
+    String? token,
   }) {
     return User(
       id: id ?? this.id,
@@ -39,6 +41,7 @@ class User {
       image: image ?? this.image,
       created_at: created_at ?? this.created_at,
       updated_at: updated_at ?? this.updated_at,
+      token: token ?? this.token,
     );
   }
 
@@ -51,6 +54,7 @@ class User {
       'image': image,
       'created_at': created_at,
       'updated_at': updated_at,
+      'token': token,
     };
   }
 
@@ -63,6 +67,7 @@ class User {
       image: map['image'] != null ? map['image'] as String : null,
       created_at: map['created_at'] != null ? map['created_at'] as String : null,
       updated_at: map['updated_at'] != null ? map['updated_at'] as String : null,
+      token: map['token'] != null ? map['token'] as String : null,
     );
   }
 
@@ -72,7 +77,7 @@ class User {
 
   @override
   String toString() {
-    return 'User(id: $id, first_name: $first_name, last_name: $last_name, role: $role, image: $image, created_at: $created_at, updated_at: $updated_at)';
+    return 'User(id: $id, first_name: $first_name, last_name: $last_name, role: $role, image: $image, created_at: $created_at, updated_at: $updated_at, token: $token)';
   }
 
   @override
@@ -86,7 +91,8 @@ class User {
       other.role == role &&
       other.image == image &&
       other.created_at == created_at &&
-      other.updated_at == updated_at;
+      other.updated_at == updated_at &&
+      other.token == token;
   }
 
   @override
@@ -97,6 +103,7 @@ class User {
       role.hashCode ^
       image.hashCode ^
       created_at.hashCode ^
-      updated_at.hashCode;
+      updated_at.hashCode ^
+      token.hashCode;
   }
 }
