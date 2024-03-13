@@ -10,7 +10,7 @@ class User {
  String? created_at;
  String? updated_at;
  String? token;
- 
+
   User({
     this.id,
     this.first_name,
@@ -59,15 +59,17 @@ class User {
   }
 
   factory User.fromMap(Map<String, dynamic> map) {
+      var user = map['data'];
+      var token = map['token'];
     return User(
-      id: map['id'] != null ? map['id'] as int : null,
-      first_name: map['first_name'] != null ? map['first_name'] as String : null,
-      last_name: map['last_name'] != null ? map['last_name'] as String : null,
-      role: map['role'] != null ? map['role'] as String : null,
-      image: map['image'] != null ? map['image'] as String : null,
-      created_at: map['created_at'] != null ? map['created_at'] as String : null,
-      updated_at: map['updated_at'] != null ? map['updated_at'] as String : null,
-      token: map['token'] != null ? map['token'] as String : null,
+      id: user['id'] != null ? user['id'] as int : null,
+      first_name:user['first_name'] != null ?user['first_name'] as String : null,
+      last_name:user['last_name'] != null ?user['last_name'] as String : null,
+      role:user['role'] != null ?user['role'] as String : null,
+      image:user['image'] != null ?user['image'] as String : null,
+      created_at:user['created_at'] != null ?user['created_at'] as String : null,
+      updated_at:user['updated_at'] != null ?user['updated_at'] as String : null,
+      token:token != null ?token as String : null,
     );
   }
 

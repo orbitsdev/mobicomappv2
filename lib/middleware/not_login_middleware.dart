@@ -4,9 +4,9 @@ import 'package:mobicom/features/authentication/login_screen.dart';
 import 'package:mobicom/features/exercises/exercises_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class AuthMiddleware extends GetMiddleware {
+class NotLoginMiddleware extends GetMiddleware {
   @override
-  int? get priority => 1;
+  int? get priority => 2;
 
   bool isAuthenticated = false;
 
@@ -31,9 +31,9 @@ class AuthMiddleware extends GetMiddleware {
 
     
     if (isAuthenticated) {
-      return null;
+      return GetNavConfig.fromRoute(ExercisesScreen.name); // Redirect to login screen
     } else {
-      return GetNavConfig.fromRoute(LoginScreen.name); // Redirect to login screen
+      return null;
     }
   }
 }
