@@ -11,13 +11,7 @@ const ChapterScreen({ Key? key }) : super(key: key);
 }
 
 class _ChapterScreenState extends State<ChapterScreen> {
-    var chaptercontroller = Get.find<ChapterController>();
-  @override
-  void initState() {
-
-    chaptercontroller.fetchChapter(context);
-    super.initState();
-  }
+  
   @override
   Widget build(BuildContext context){
     return Scaffold(

@@ -8,33 +8,37 @@ import 'package:mobicom/constant/typdef.dart';
 import 'package:mobicom/modals/dialogs.dart';
 import 'package:mobicom/models/chapter.dart';
 import 'package:http/http.dart' as http;
+import 'package:mobicom/models/lesson.dart';
 import 'package:mobicom/services/api.dart';
 
 class ChapterController extends GetxController {
-  var chapters = <Chapter>[];
+
+  var chapters = <Chapter>[].obs; // Change to non-nullable list
 
   EitherModel<String?> fetchChapter(BuildContext context) async {
-  try {
- 
+    try {
+      var response = await http.get(Uri.parse(Api.chapters));
+      var responseData = jsonDecode(response.body);
 
-    var response = await http.get(Uri.parse(Api.chapters));
-    var responseData = jsonDecode(response.body);
+      if (responseData['success']) {
+        var data = responseData['data']['data'] as List<dynamic>; // Extracting the chapters array from the response
+      List<Chapter> new_data = (data.map((e) => Chapter.fromMap(e as Map<String, dynamic>) )).toList();
+      chapters(new_data);
+      chapters.forEach((element) => print(element.lessons?.length),);
+     
 
-    if (responseData['success']) {
-      var data = responseData['data']['data']; // Extracting the chapters array from the response
-      chapters = data.map((chapterData) => Chapter.fromMap(chapterData)).toList();
-      return right('Data fetched successfully'); // Returning a success message
-    } else {
-      Dialogs.showErrorDialog(context, 'Something went wrong');
-      return left('Something went wrong'); // Returning an error message
+        return right('Data fetched successfully'); // Returning a success message
+      } else {
+        Dialogs.showErrorDialog(context, 'Something went wrong');
+        return left('Something went wrong'); // Returning an error message
+      }
+    } on SocketException catch (e) {
+      Dialogs.showErrorDialog(context, e.message);
+      return left('No internet connection');
+    } catch (e) {
+      Dialogs.showErrorDialog(context, e.toString());
+      return left(e.toString());
     }
-  } on SocketException catch (e) {
-    Dialogs.showErrorDialog(context, e.message);
-    return left('No internet connection');
-  } catch (e) {
-    Dialogs.showErrorDialog(context, e.toString());
-    return left(e.toString());
   }
-}
 
 }
