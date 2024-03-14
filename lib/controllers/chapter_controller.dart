@@ -14,6 +14,7 @@ import 'package:mobicom/services/api.dart';
 class ChapterController extends GetxController {
 
   var chapters = <Chapter>[].obs; // Change to non-nullable list
+  var lessons = <Lesson>[].obs; // Change to non-nullable list
 
   EitherModel<String?> fetchChapter(BuildContext context) async {
     try {
@@ -24,7 +25,35 @@ class ChapterController extends GetxController {
         var data = responseData['data']['data'] as List<dynamic>; // Extracting the chapters array from the response
       List<Chapter> new_data = (data.map((e) => Chapter.fromMap(e as Map<String, dynamic>) )).toList();
       chapters(new_data);
-      chapters.forEach((element) => print(element.lessons?.length),);
+
+     
+
+        return right('Data fetched successfully'); // Returning a success message
+      } else {
+        Dialogs.showErrorDialog(context, 'Something went wrong');
+        return left('Something went wrong'); // Returning an error message
+      }
+    } on SocketException catch (e) {
+      Dialogs.showErrorDialog(context, e.message);
+      return left('No internet connection');
+    } catch (e) {
+      Dialogs.showErrorDialog(context, e.toString());
+      return left(e.toString());
+    }
+  }
+  EitherModel<String?> fetchChapterLessons(BuildContext context , chapterId) async {
+    try {
+      var response = await http.get(Uri.parse(Api.chapter_lessons+"?chapter_id=${chapterId}"));
+      var responseData = jsonDecode(response.body);
+
+      if (responseData['success']) {
+        var data = responseData['data']['data'] as List<dynamic>; 
+
+        List<Lesson> new_data = (data.map((e) => Lesson.fromMap(e as Map<String,dynamic>))).toList();
+        lessons(new_data);
+        print(lessons.length);
+   
+
      
 
         return right('Data fetched successfully'); // Returning a success message

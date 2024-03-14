@@ -10,6 +10,7 @@ class Api {
   static String register = "${Env.APP_URL_PRODUCTION}api/register";
   static String sections = "${Env.APP_URL_PRODUCTION}api/sections";
   static String chapters = "${Env.APP_URL_PRODUCTION}api/chapters";
+  static String chapter_lessons = "${Env.APP_URL_PRODUCTION}api/chapter/lessons";
   
 
   

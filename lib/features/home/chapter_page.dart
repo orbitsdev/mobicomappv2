@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobicom/controllers/chapter_controller.dart';
+import 'package:mobicom/features/chapters/chapter_screen.dart';
 import 'package:mobicom/features/chapters/components/custome_cardv2.dart';
 import 'package:mobicom/features/chapters/lessson_screen.dart';
 
@@ -38,8 +39,7 @@ class _ChapterPageState extends State<ChapterPage> {
           separatorBuilder: (context, index) => SizedBox(height: 24),
           itemCount: chapterController.chapters.length,
           itemBuilder: (context, index) => GestureDetector(
-            onTap: () => Get.to(() => LesssonScreen(),
-                arguments: {'chapter': chapterController.chapters[index]}),
+            onTap: () => Get.to(() => ChapterScreen() , arguments: {'chapter': chapterController.chapters[index]}),
             child: CustomeCardv2(chapter: chapterController.chapters[index]),
           ),
         ),

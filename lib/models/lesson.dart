@@ -145,4 +145,33 @@ class Lesson {
       created_at.hashCode ^
       updated_at.hashCode;
   }
+
+   static List<Map<String, String>> staticLessons = [
+    {"title": "Lesson 1", "description": "Description for Lesson 1"},
+    {"title": "Lesson 2", "description": "Description for Lesson 2"},
+    {"title": "Lesson 3", "description": "Description for Lesson 3"},
+    {"title": "Lesson 3", "description": "Description for Lesson 3"},
+    {"title": "Lesson 3", "description": "Description for Lesson 3"},
+    {"title": "Lesson 3", "description": "Description for Lesson 3"},
+    {"title": "Lesson 3", "description": "Description for Lesson 3"},
+    {"title": "Lesson 3", "description": "Description for Lesson 3"},
+    {"title": "Lesson 3", "description": "Description for Lesson 3"},
+    {"title": "Lesson 3", "description": "Description for Lesson 3"},
+    {"title": "Lesson 3", "description": "Description for Lesson 3"},
+    {"title": "Lesson 3", "description": "Description for Lesson 3"},
+    {"title": "Lesson 3", "description": "Description for Lesson 3"},
+    {"title": "Lesson 3", "description": "Description for Lesson 3"},
+    {"title": "Lesson 3", "description": "Description for Lesson 3"},
+    {"title": "Lesson 3", "description": "Description for Lesson 3"},
+    {"title": "Lesson 3", "description": "Description for Lesson 3"},
+    {"title": "Lesson 3", "description": "Description for Lesson 3"},
+    {"title": "Lesson 3", "description": "Description for Lesson 3"},
+    {"title": "Lesson 3", "description": "Description for Lesson 3"},
+    {"title": "Lesson 3", "description": "Description for Lesson 3"},
+  ];
 }
+
+
+
+
+
