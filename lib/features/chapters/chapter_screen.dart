@@ -22,6 +22,7 @@ class ChapterScreen extends StatefulWidget {
 
 class _ChapterScreenState extends State<ChapterScreen> {
   final ChapterController chapterController = Get.put(ChapterController());
+  bool _isExpanded = false;
 
   @override
   void initState() {
@@ -35,11 +36,15 @@ class _ChapterScreenState extends State<ChapterScreen> {
 
   Widget buildChapterOverview() {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: ExpansionTile(
-        initiallyExpanded: true,
-        title: Text("Chapter Overview"),
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          Text(
+            "Chapter Overview",
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          ),
+          SizedBox(height: 16),
           MardownViewer(description: widget.chapter?.description ?? ''),
         ],
       ),
@@ -48,66 +53,86 @@ class _ChapterScreenState extends State<ChapterScreen> {
 
   Widget buildLessonList() {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: ExpansionTile(
-        initiallyExpanded: true,
-        title: Text("Lessons"),
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          Text(
+            "Lessons",
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          ),
+          SizedBox(height: 16),
           Obx(
-            ()=> chapterController.isLessonLoading.value ? CircularProgressIndicator(): SingleChildScrollView(
-              child: Container(
-                height: MediaQuery.of(context).size.height * 0.5,
-                child: ListView.separated(
-                  shrinkWrap: true,
-                  itemCount: chapterController.lessons.length,
-                  separatorBuilder: (context, index) => Divider(color: Colors.grey), // Add separator between lessons
-                  itemBuilder: (context, index) {
-                    Lesson lesson = chapterController.lessons[index];
-                    return ListTile(
-                      onTap: () => Get.to(()=>LessonScreen(lesson:chapterController.lessons[index])),
-                      leading: Text('Lesson:${lesson.lesson_number}'),
-                      title: Text('${lesson.title}'),
-                    );
-                  },
-                ),
-              ),
-            ),
+            () => chapterController.isLessonLoading.value
+                ? Center(child: CircularProgressIndicator())
+                : Column(
+                    children: chapterController.lessons.map((lesson) {
+                      return GestureDetector(
+                        onTap: () => Get.to(() => LessonScreen(lesson: lesson)),
+                        child: Card(
+                          elevation: 4,
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Row(
+                              children: [
+                                Text(
+                                  'Lesson ${lesson.lesson_number}',
+                                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                ),
+                                SizedBox(width: 16),
+                                Expanded(
+                                  child: Text(
+                                    '${lesson.title}',
+                                    style: TextStyle(fontSize: 16),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  ),
           ),
         ],
       ),
     );
+  }
+
+  Future<void> _refreshPage() async {
+    // Add your refresh logic here, like fetching updated data
+    await fetchChapterLessons();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xff111827),
-      body: CustomScrollView(
-        slivers: [
-          SliverAppBar(
-            title: Text(widget.chapter?.title ?? ''),
-            expandedHeight: 200,
-            flexibleSpace: FlexibleSpaceBar(
-              background: widget.chapter?.image_path != null
+      appBar: AppBar(
+        title: Text(
+          widget.chapter?.title ?? '',
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        ),
+      ),
+      body: RefreshIndicator(
+        onRefresh: _refreshPage,
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              widget.chapter?.image_path != null
                   ? Image.network(
                       widget.chapter!.image_path!,
                       fit: BoxFit.cover,
-                      repeat: ImageRepeat.noRepeat,
                     )
-                  : null,
-            ),
+                  : Container(),
+              buildChapterOverview(),
+              buildLessonList(),
+            ],
           ),
-          SliverList(
-            delegate: SliverChildListDelegate(
-              [
-                buildChapterOverview(),
-                buildLessonList(),
-              ],
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
 }
-

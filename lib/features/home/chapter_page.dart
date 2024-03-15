@@ -34,13 +34,16 @@ class _ChapterPageState extends State<ChapterPage> {
     return Obx(
       () => RefreshIndicator(
         onRefresh: _refreshChapters,
-        child: ListView.separated(
-          shrinkWrap: true,
-          separatorBuilder: (context, index) => SizedBox(height: 24),
-          itemCount: chapterController.chapters.length,
-          itemBuilder: (context, index) => GestureDetector(
-            onTap: () => Get.to(() => ChapterScreen(chapter: chapterController.chapters[index],)),
-            child: CustomeCardv2(chapter: chapterController.chapters[index]),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: ListView.separated(
+            shrinkWrap: true,
+            separatorBuilder: (context, index) => SizedBox(height: 24),
+            itemCount: chapterController.chapters.length,
+            itemBuilder: (context, index) => GestureDetector(
+              onTap: () => Get.to(() => ChapterScreen(chapter: chapterController.chapters[index],)),
+              child: CustomeCardv2(chapter: chapterController.chapters[index]),
+            ),
           ),
         ),
       ),
