@@ -7,18 +7,22 @@ import 'package:mobicom/controllers/auth_controller.dart';
 import 'package:mobicom/features/authentication/login_screen.dart';
 import 'package:mobicom/features/authentication/register_screen.dart';
 import 'package:mobicom/features/chapters/chapter_screen.dart';
-import 'package:mobicom/features/chapters/lessson_screen.dart';
+import 'package:mobicom/features/chapters/lesson_screen.dart';
 import 'package:mobicom/features/exercises/exercises_screen.dart';
 import 'package:mobicom/features/home_screen.dart';
 import 'package:mobicom/middleware/auth_middleware.dart';
 import 'package:mobicom/middleware/not_login_middleware.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+
+final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-    DeviceOrientation.portraitDown,
+     DeviceOrientation.portraitUp,
+  DeviceOrientation.portraitDown,
+  DeviceOrientation.landscapeLeft,
+  DeviceOrientation.landscapeRight
   ]);
 
   AppControllerBinding().dependencies();
@@ -92,8 +96,8 @@ class _MyAppState extends State<MyApp> {
           ]
           ),
         GetPage(
-            name: LesssonScreen.name,
-            page: () => LesssonScreen(),
+            name: LessonScreen.name,
+            page: () => LessonScreen(),
                         transition: Transition.cupertino,
             middlewares: [AuthMiddleware()
           ]

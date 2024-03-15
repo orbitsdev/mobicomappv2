@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:get/get.dart';
+import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:mobicom/constant/typdef.dart';
 import 'package:mobicom/controllers/chapter_controller.dart';
+import 'package:mobicom/features/chapters/lesson_screen.dart';
 import 'package:mobicom/models/chapter.dart';
 import 'package:mobicom/models/lesson.dart';
-
+import 'package:mobicom/widgets/mardown_viewer.dart';
 
 class ChapterScreen extends StatefulWidget {
-  const ChapterScreen({Key? key}) : super(key: key);
+  final Chapter? chapter;
+
+  const ChapterScreen({Key? key, this.chapter}) : super(key: key);
+
   static String name = '/chapter-details';
 
   @override
@@ -15,19 +21,61 @@ class ChapterScreen extends StatefulWidget {
 }
 
 class _ChapterScreenState extends State<ChapterScreen> {
-  late ChapterController chapterController;
-  late Chapter chapter;
+  final ChapterController chapterController = Get.put(ChapterController());
 
   @override
   void initState() {
     super.initState();
-    chapterController = Get.find<ChapterController>();
-    chapter = Get.arguments['chapter'] as Chapter;
-    fetchLesson(chapter.id);
+    fetchChapterLessons();
   }
 
-  void fetchLesson(chapterId) async {
-    await chapterController.fetchChapterLessons(context, chapterId);
+  fetchChapterLessons() async {
+    await chapterController.fetchChapterLessons(context, widget.chapter!.id);
+  }
+
+  Widget buildChapterOverview() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: ExpansionTile(
+        initiallyExpanded: true,
+        title: Text("Chapter Overview"),
+        children: [
+          MardownViewer(description: widget.chapter?.description ?? ''),
+        ],
+      ),
+    );
+  }
+
+  Widget buildLessonList() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: ExpansionTile(
+        initiallyExpanded: true,
+        title: Text("Lessons"),
+        children: [
+          Obx(
+            ()=> chapterController.isLessonLoading.value ? CircularProgressIndicator(): SingleChildScrollView(
+              child: Container(
+                height: MediaQuery.of(context).size.height * 0.5,
+                child: ListView.separated(
+                  shrinkWrap: true,
+                  itemCount: chapterController.lessons.length,
+                  separatorBuilder: (context, index) => Divider(color: Colors.grey), // Add separator between lessons
+                  itemBuilder: (context, index) {
+                    Lesson lesson = chapterController.lessons[index];
+                    return ListTile(
+                      onTap: () => Get.to(()=>LessonScreen(lesson:chapterController.lessons[index])),
+                      leading: Text('Lesson:${lesson.lesson_number}'),
+                      title: Text('${lesson.title}'),
+                    );
+                  },
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -37,64 +85,24 @@ class _ChapterScreenState extends State<ChapterScreen> {
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
-            title: Text(chapter.title ?? ''),
+            title: Text(widget.chapter?.title ?? ''),
             expandedHeight: 200,
             flexibleSpace: FlexibleSpaceBar(
-              background: chapter.image_path != null
+              background: widget.chapter?.image_path != null
                   ? Image.network(
-                      chapter.image_path!,
+                      widget.chapter!.image_path!,
                       fit: BoxFit.cover,
+                      repeat: ImageRepeat.noRepeat,
                     )
                   : null,
             ),
           ),
-          Obx(
-            () => SliverList(
-              delegate: SliverChildListDelegate(
-                [
-                  // Render HTML content for chapter description
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: ExpansionTile(
-                      initiallyExpanded: true,
-                      title: Text("Chapter Overview"),
-                      children: [
-                         Html(
-                                          data: chapter.description ?? '',
-                        style: {
-                          "figcaption": Style(
-                            display: Display.none,
-                          ),
-                          "img": Style(
-                            margin: Margins.all(0),
-                            // Adjust margin as needed
-                            width: Width(300), // Set a fixed width for the image
-                            height:
-                                Height(200), // Set a fixed height for the image
-                            display: Display
-                                .block, // Ensure the image is displayed as a block element
-                            textAlign: TextAlign.start, // Center the image
-                          ),
-                          "pre": Style(
-                            border: Border.all(color: Colors.white),
-                            padding: HtmlPaddings.all(10),
-                            backgroundColor: Color(
-                                0xff0d121b), // Set image height, adjust as needed
-                          ),
-                        },
-                        
-                      )
-                      ],
-                    ),
-                  ),
-                  // Render lesson titles
-                 ...chapterController.lessons.map((lesson) => ListTile(
-  leading: lesson.image_path != null ? Image.network(lesson.image_path!) : null,
-  title: Text('${lesson.title}'),
-)),
-
-                ],
-              ),
+          SliverList(
+            delegate: SliverChildListDelegate(
+              [
+                buildChapterOverview(),
+                buildLessonList(),
+              ],
             ),
           ),
         ],
@@ -102,3 +110,4 @@ class _ChapterScreenState extends State<ChapterScreen> {
     );
   }
 }
+
