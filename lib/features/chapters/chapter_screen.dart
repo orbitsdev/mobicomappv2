@@ -8,6 +8,7 @@ import 'package:mobicom/controllers/chapter_controller.dart';
 import 'package:mobicom/features/chapters/lesson_screen.dart';
 import 'package:mobicom/models/chapter.dart';
 import 'package:mobicom/models/lesson.dart';
+import 'package:mobicom/widgets/full_screen.dart';
 import 'package:mobicom/widgets/mardown_viewer.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -73,14 +74,17 @@ class _ChapterScreenState extends State<ChapterScreen> {
                         onTap: () => Get.to(() => LessonScreen(lesson: lesson)),
                         child: Card(
                           elevation: 4,
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8)),
                           child: Padding(
                             padding: const EdgeInsets.all(16.0),
                             child: Row(
                               children: [
                                 Text(
                                   'Lesson ${lesson.lesson_number}',
-                                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold),
                                 ),
                                 SizedBox(width: 16),
                                 Expanded(
@@ -124,28 +128,31 @@ class _ChapterScreenState extends State<ChapterScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               widget.chapter?.image_path != null
-                  ? CachedNetworkImage(
-  height: 181,
-  width: double.infinity,
-  fit: BoxFit.cover,
-  imageUrl: widget.chapter!.image_path!,
-  placeholder: (context, url) => Shimmer.fromColors(
-    child: Container(
-      height: 181,
-      width: double.infinity,
-      color: Colors.grey[300],
-    ),
-    baseColor: Colors.grey[300]!,
-    highlightColor: Colors.grey[100]!,
-  ),
-  errorWidget: (context, url, error) => Image.asset(
-    'assets/images/placeholder.png',
-    height: 181,
-    width: double.infinity,
-    fit: BoxFit.cover,
-    // color:  Colors.black, // Provide a default color if not provided
-  ),
-)
+                  ? GestureDetector(
+                    onTap: ()=>  Get.to(()=>FullScreenImage(imageUrl: widget.chapter!.image_path!)),
+                    child: CachedNetworkImage(
+                        height: 181,
+                        width: double.infinity,
+                        fit: BoxFit.cover,
+                        imageUrl: widget.chapter!.image_path!,
+                        placeholder: (context, url) => Shimmer.fromColors(
+                          child: Container(
+                            height: 181,
+                            width: double.infinity,
+                            color: Colors.grey[300],
+                          ),
+                          baseColor: Colors.grey[300]!,
+                          highlightColor: Colors.grey[100]!,
+                        ),
+                        errorWidget: (context, url, error) => Image.asset(
+                          'assets/images/placeholder.png',
+                          height: 181,
+                          width: double.infinity,
+                          fit: BoxFit.cover,
+                          // color:  Colors.black, // Provide a default color if not provided
+                        ),
+                      ),
+                  )
                   : Container(),
               buildChapterOverview(),
               buildLessonList(),
