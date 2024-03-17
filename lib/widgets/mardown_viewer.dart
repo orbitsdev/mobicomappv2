@@ -2,9 +2,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 
-class MardownViewer extends StatelessWidget {
+class MarkdownViewer extends StatelessWidget {
   final String description;
-  const MardownViewer({
+  const MarkdownViewer({
     Key? key,
     required this.description,
   }) : super(key: key);

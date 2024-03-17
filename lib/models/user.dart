@@ -2,31 +2,36 @@
 import 'dart:convert';
 
 class User {
- int? id;
- String? first_name;
- String? last_name;
- String? role;
- String? image;
- String? created_at;
- String? updated_at;
- String? token;
+  int? id;
+  String? first_name;
+  String? last_name;
+  String? email;
+  String? full_name;
+  String? role;
+  String? image;
+  String? created_at;
+  String? updated_at;
+  String? token;
 
   User({
     this.id,
     this.first_name,
     this.last_name,
+    this.email,
+    this.full_name,
     this.role,
     this.image,
     this.created_at,
     this.updated_at,
     this.token,
   });
- 
 
   User copyWith({
     int? id,
     String? first_name,
     String? last_name,
+    String? email,
+    String? full_name,
     String? role,
     String? image,
     String? created_at,
@@ -37,6 +42,8 @@ class User {
       id: id ?? this.id,
       first_name: first_name ?? this.first_name,
       last_name: last_name ?? this.last_name,
+      email: email ?? this.email,
+      full_name: full_name ?? this.full_name,
       role: role ?? this.role,
       image: image ?? this.image,
       created_at: created_at ?? this.created_at,
@@ -50,6 +57,8 @@ class User {
       'id': id,
       'first_name': first_name,
       'last_name': last_name,
+      'email': email,
+      'full_name': full_name,
       'role': role,
       'image': image,
       'created_at': created_at,
@@ -57,19 +66,37 @@ class User {
       'token': token,
     };
   }
+  factory User.stringToModel(Map<String, dynamic> map) {
+  return User(
+    id: map['id'] != null ? map['id'] as int : null,
+    first_name: map['first_name'] != null ? map['first_name'] as String : null,
+    last_name: map['last_name'] != null ? map['last_name'] as String : null,
+    full_name: map['full_name'] != null ? map['full_name'] as String : null,
+    email: map['email'] != null ? map['email'] as String : null,
+    role: map['role'] != null ? map['role'] as String : null,
+    image: map['image'] != null ? map['image'] as String : null,
+    created_at: map['created_at'] != null ? map['created_at'] as String : null,
+    updated_at: map['updated_at'] != null ? map['updated_at'] as String : null,
+    token: map['token'] != null ? map['token'] as String : null,
+  );
+}
 
   factory User.fromMap(Map<String, dynamic> map) {
-      var user = map['data'];
-      var token = map['token'];
+    var user = map['data'];
+    var token = map['token'];
     return User(
       id: user['id'] != null ? user['id'] as int : null,
-      first_name:user['first_name'] != null ?user['first_name'] as String : null,
-      last_name:user['last_name'] != null ?user['last_name'] as String : null,
-      role:user['role'] != null ?user['role'] as String : null,
-      image:user['image'] != null ?user['image'] as String : null,
-      created_at:user['created_at'] != null ?user['created_at'] as String : null,
-      updated_at:user['updated_at'] != null ?user['updated_at'] as String : null,
-      token:token != null ?token as String : null,
+      first_name: user['first_name'] != null ? user['first_name'] as String : null,
+      last_name: user['last_name'] != null ? user['last_name'] as String : null,
+      email: user['email'] != null ? user['email'] as String : null,
+      full_name: (user['first_name'] != null && user['last_name'] != null)
+          ? '${user['first_name']} ${user['last_name']}'
+          : null,
+      role: user['role'] != null ? user['role'] as String : null,
+      image: user['image'] != null ? user['image'] as String : null,
+      created_at: user['created_at'] != null ? user['created_at'] as String : null,
+      updated_at: user['updated_at'] != null ? user['updated_at'] as String : null,
+      token: token != null ? token as String : null,
     );
   }
 
@@ -79,33 +106,37 @@ class User {
 
   @override
   String toString() {
-    return 'User(id: $id, first_name: $first_name, last_name: $last_name, role: $role, image: $image, created_at: $created_at, updated_at: $updated_at, token: $token)';
+    return 'User(id: $id, first_name: $first_name, last_name: $last_name, email: $email, full_name: $full_name, role: $role, image: $image, created_at: $created_at, updated_at: $updated_at, token: $token)';
   }
 
   @override
   bool operator ==(covariant User other) {
     if (identical(this, other)) return true;
-  
-    return 
-      other.id == id &&
-      other.first_name == first_name &&
-      other.last_name == last_name &&
-      other.role == role &&
-      other.image == image &&
-      other.created_at == created_at &&
-      other.updated_at == updated_at &&
-      other.token == token;
+    return other.id == id &&
+        other.first_name == first_name &&
+        other.last_name == last_name &&
+        other.email == email &&
+        other.full_name == full_name &&
+        other.role == role &&
+        other.image == image &&
+        other.created_at == created_at &&
+        other.updated_at == updated_at &&
+        other.token == token;
   }
 
   @override
   int get hashCode {
     return id.hashCode ^
-      first_name.hashCode ^
-      last_name.hashCode ^
-      role.hashCode ^
-      image.hashCode ^
-      created_at.hashCode ^
-      updated_at.hashCode ^
-      token.hashCode;
+        first_name.hashCode ^
+        last_name.hashCode ^
+        email.hashCode ^
+        full_name.hashCode ^
+        role.hashCode ^
+        image.hashCode ^
+        created_at.hashCode ^
+        updated_at.hashCode ^
+        token.hashCode;
   }
+
+  
 }

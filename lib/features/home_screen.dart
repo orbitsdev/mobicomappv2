@@ -5,6 +5,7 @@ import 'package:mobicom/controllers/auth_controller.dart';
 import 'package:mobicom/features/home/chapter_page.dart';
 import 'package:mobicom/features/home/exercise_page.dart';
 import 'package:mobicom/features/home/taked_exercise_page.dart';
+import 'package:mobicom/widgets/user_info.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -35,7 +36,6 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Home'),
       ),
       drawer: Drawer(
         child: ListView(
@@ -45,36 +45,14 @@ class _HomeScreenState extends State<HomeScreen> {
               decoration: BoxDecoration(
                 color: Color(0xfff7d336),
               ),
-              child: Text(
-                'Drawer Header',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 24,
-                ),
-              ),
+              child: UserInfoWidget(), // Custom user info widget
             ),
             ListTile(
-              title: Text('Chapters'),
+              leading: Icon(Icons.logout), // Use the logout icon
+              title: Text('Logout'),
               onTap: () {
-                // Navigate to chapters screen
-                // You can replace '/chapters' with the route to your chapters screen
-                // Get.toNamed('/chapters');
-              },
-            ),
-            ListTile(
-              title: Text('Exercises'),
-              onTap: () {
-                // Navigate to exercises screen
-                // You can replace '/exercises' with the route to your exercises screen
-                // Get.toNamed('/exercises');
-              },
-            ),
-            ListTile(
-              title: Text('Taken Exercises'),
-              onTap: () {
-                // Navigate to taken exercises screen
-                // You can replace '/taken_exercises' with the route to your taken exercises screen
-                // Get.toNamed('/taken_exercises');
+                // Call the logout method from the authController
+                authController.logout(context);
               },
             ),
           ],

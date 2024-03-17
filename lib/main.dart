@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -12,42 +15,46 @@ import 'package:mobicom/features/exercises/exercises_screen.dart';
 import 'package:mobicom/features/home_screen.dart';
 import 'package:mobicom/middleware/auth_middleware.dart';
 import 'package:mobicom/middleware/not_login_middleware.dart';
+import 'package:mobicom/models/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
 final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
-Future<void> main() async {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SystemChrome.setPreferredOrientations([
-     DeviceOrientation.portraitUp,
-  DeviceOrientation.portraitDown,
-  DeviceOrientation.landscapeLeft,
-  DeviceOrientation.landscapeRight
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+    DeviceOrientation.landscapeLeft,
+    DeviceOrientation.landscapeRight
   ]);
 
+  // Initialize the bindings
   AppControllerBinding().dependencies();
-  runApp(const MyApp());
+
+  // Check if the user is authenticated
+final SharedPreferences prefs = await SharedPreferences.getInstance();
+final userData = prefs.getString('user');
+
+if (userData != null) {
+  final userMap = jsonDecode(userData); 
+  
+
+  var authController = Get.find<AuthController>();
+  var user = User.stringToModel(userMap); // Create a User object from the map
+  authController.user(user); 
+  print(user.toJson());// Set the user in the AuthController
 }
 
-class MyApp extends StatefulWidget {
-  const MyApp({Key? key}) : super(key: key);
 
-  @override
-  _MyAppState createState() => _MyAppState();
+  final String initialRoute =userData != null ? HomeScreen.name : LoginScreen.name;
+
+  runApp(MyApp(initialRoute: initialRoute));
 }
 
-class _MyAppState extends State<MyApp> {
-  var authcontroller = Get.find<AuthController>();
-  @override
-  void initState() {
-    testStorage();
-    super.initState();
-  }
+class MyApp extends StatelessWidget {
+  final String initialRoute;
 
-  void testStorage() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('action', 'Start');
-  }
+  const MyApp({Key? key, required this.initialRoute}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +62,7 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       title: 'GATE APP',
       theme: ThemeData(useMaterial3: true),
-     themeMode: ThemeMode.dark,
+      themeMode: ThemeMode.dark,
       darkTheme: ThemeData.dark().copyWith(
         // Customize the dark theme colors here
         scaffoldBackgroundColor: Colors.black45, // Very dark blue
@@ -66,42 +73,18 @@ class _MyAppState extends State<MyApp> {
           backgroundColor: Colors.black, // Darker blue
         ),
       ),
-      initialRoute: HomeScreen.name,
+      initialRoute: initialRoute,
       getPages: [
-        GetPage(name: HomeScreen.name, page: () => HomeScreen(), middlewares: [
-          //  NotLoginMiddleware(),
-        ]),
         GetPage(
-            name: LoginScreen.name,
-            page: () => LoginScreen(),
-            transition: Transition.cupertino,
-            middlewares: [
-              NotLoginMiddleware(),
-            ]),
+          name: HomeScreen.name,
+          page: () => HomeScreen(),
+          middlewares: [AuthMiddleware()],
+        ),
         GetPage(
-            name: RegisterScreen.name,
-            page: () => RegisterScreen(),
-                        transition: Transition.cupertino,
-            middlewares: [AuthMiddleware()]),
-        GetPage(
-            name: ExercisesScreen.name,
-            page: () => ExercisesScreen(),
-                        transition: Transition.cupertino,
-            middlewares: [AuthMiddleware()]),
-        GetPage(
-            name: ChapterScreen.name,
-            page: () => ChapterScreen(),
-                        transition: Transition.cupertino,
-            middlewares: [AuthMiddleware()
-          ]
-          ),
-        GetPage(
-            name: LessonScreen.name,
-            page: () => LessonScreen(),
-                        transition: Transition.cupertino,
-            middlewares: [AuthMiddleware()
-          ]
-          ),
+          name: LoginScreen.name,
+          page: () => LoginScreen(),
+          transition: Transition.cupertino,
+        ),
       ],
     );
   }

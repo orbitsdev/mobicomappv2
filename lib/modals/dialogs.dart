@@ -33,4 +33,35 @@ class Dialogs {
       ),
     );
   }
+
+   static void showConfirmationDialog(BuildContext context, String title, String message, Function()? onConfirm) {
+    showCupertinoDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => CupertinoAlertDialog(
+        title: Text(title),
+        content: Text(message),
+        actions: [
+          CupertinoDialogAction(
+            onPressed: () {
+              Navigator.of(context).pop();
+              if (onConfirm != null) {
+                onConfirm();
+              }
+            },
+            child: Text('Start'),
+          ),
+          CupertinoDialogAction(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text('Cancel'),
+          ),
+        ],
+      ),
+    );
+  }
+
+
 }
+
+
+

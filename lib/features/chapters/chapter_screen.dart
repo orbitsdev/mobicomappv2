@@ -48,7 +48,7 @@ class _ChapterScreenState extends State<ChapterScreen> {
             style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           ),
           SizedBox(height: 16),
-          MardownViewer(description: widget.chapter?.description ?? ''),
+          MarkdownViewer(description: widget.chapter?.description ?? ''),
         ],
       ),
     );

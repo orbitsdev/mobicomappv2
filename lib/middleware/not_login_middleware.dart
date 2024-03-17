@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobicom/features/authentication/login_screen.dart';
 import 'package:mobicom/features/exercises/exercises_screen.dart';
+import 'package:mobicom/features/home_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class NotLoginMiddleware extends GetMiddleware {
@@ -27,11 +28,9 @@ class NotLoginMiddleware extends GetMiddleware {
       isAuthenticated = false;
     }
 
-    // If user is authenticated, allow navigation, otherwise redirect to login
-
-    
+    // If user is authenticated, redirect to home screen, otherwise allow navigation
     if (isAuthenticated) {
-      return GetNavConfig.fromRoute(ExercisesScreen.name); // Redirect to login screen
+      return GetNavConfig.fromRoute(HomeScreen.name); // Redirect to home screen
     } else {
       return null;
     }

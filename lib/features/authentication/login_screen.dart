@@ -7,6 +7,7 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:mobicom/controllers/auth_controller.dart';
 import 'package:mobicom/controllers/section_controller.dart';
+import 'package:mobicom/features/authentication/register_screen.dart';
 import 'package:mobicom/services/api.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -21,44 +22,22 @@ class _LoginScreenState extends State<LoginScreen> {
   var auth_controller = Get.find<AuthController>();
   var sectioncontroller = Get.find<SectionController>();
   final GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
-  String? _sectionValue; // Initialize section value
-  List<Map<String, dynamic>>_sectionOptions = []; // List to store section options
+  
+
+  bool _isObscure = true;
 
   @override
   void initState() {
     super.initState();
-    // sectioncontroller.fetchSections();
-    
-    _fetchSections(); // Fetch sections when the screen initializes
-  }
+   }
 
-  Future<void> _fetchSections() async {
-    final response = await http.get(Uri.parse(Api.sections));
-    if (response.statusCode == 200) {
-      // If the server returns a successful response, parse the JSON
-      final Map<String, dynamic> data = jsonDecode(response.body);
-      final List<dynamic> sections = data['data']['data'];
-      setState(() {
-        // Update the _sectionOptions list with the fetched sections
-        _sectionOptions = sections.map<Map<String,dynamic>>((section) => section as Map<String ,dynamic> ).toList();
-      });
-    } else {
-      // If the server did not return a 200 OK response,
-      // throw an exception or display an error message.
-      throw Exception('Failed to load sections');
-    }
-  }
+  
 
-
-   void _submit(BuildContext context) async {
-      // await auth_controller.login(context, {});
+  void _submit(BuildContext context) async {
     if (_formKey.currentState!.saveAndValidate()) {
-    Map<String, dynamic> formData = Map.from(_formKey.currentState!.value);
-    formData['enrolled_section_id'] = _sectionValue;
-    print('_____________________');
-    print(formData);
-    await auth_controller.register(context, formData);
-    
+      final formData = Map<String, dynamic>.from(_formKey.currentState!.value);
+      // formData['enrolled_section_id'] = _sectionValue;
+      await auth_controller.login(context, formData);
     } else {
       print('Form validation failed!');
     }
@@ -67,66 +46,69 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Login Screen'),
-      ),
       body: SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: 20),
         child: FormBuilder(
           key: _formKey,
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              FormBuilderTextField(
-                name: 'first_name',
-                decoration: const InputDecoration(labelText: 'First Name'),
-                validator: FormBuilderValidators.compose([
-                  FormBuilderValidators.required(),
-                ]),
-              ),
-              FormBuilderTextField(
-                name: 'last_name',
-                decoration: const InputDecoration(labelText: 'Last Name'),
-                validator: FormBuilderValidators.compose([
-                  FormBuilderValidators.required(),
-                ]),
-              ),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.2),
               FormBuilderTextField(
                 name: 'email',
-                decoration: const InputDecoration(labelText: 'Email'),
+                decoration: InputDecoration(
+                  labelText: 'Email',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  prefixIcon: Icon(Icons.email),
+                ),
                 validator: FormBuilderValidators.compose([
                   FormBuilderValidators.required(),
                   FormBuilderValidators.email(),
                 ]),
               ),
-               DropdownButtonFormField<String>(
-                value: _sectionValue,
-                items: _sectionOptions.map((Map<String, dynamic> section) {
-                  return DropdownMenuItem<String>(
-                    value: section['id'].toString(),
-                    child: Text('${section['title']}'),
-                  );
-                }).toList(),
-                onChanged: (String? value) {
-                  setState(() {
-                    _sectionValue = value;
-                  });
-                },
-                decoration: InputDecoration(labelText: 'Section'),
-              ),
               SizedBox(height: 20),
               FormBuilderTextField(
                 name: 'password',
-                decoration: const InputDecoration(labelText: 'Password'),
+                decoration: InputDecoration(
+                  labelText: 'Password',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  prefixIcon: Icon(Icons.lock),
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                        _isObscure ? Icons.visibility : Icons.visibility_off),
+                    onPressed: () {
+                      setState(() {
+                        _isObscure = !_isObscure;
+                      });
+                    },
+                  ),
+                ),
                 validator: FormBuilderValidators.compose([
                   FormBuilderValidators.required(),
                 ]),
-                obscureText: true,
+                obscureText: _isObscure,
               ),
-             
-                ElevatedButton(
-                  onPressed: ()=>  _submit(context),
-                  child: Text('Submit'),
-                
+              SizedBox(height: 20),
+              SizedBox(
+                height: 50,
+                width: double.infinity, // Set width to match the parent width
+                child: ElevatedButton(
+                  onPressed: () => _submit(context),
+                  child: Text('LOGIN'),
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  Get.toNamed(RegisterScreen.name);
+                },
+                child: Text(
+                  'Don\'t have an account? Register here',
+                  style: TextStyle(color: Colors.blue),
+                ),
               ),
             ],
           ),
@@ -134,6 +116,4 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
-
- 
 }

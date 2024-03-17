@@ -1,15 +1,56 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:mobicom/controllers/exercise_controller.dart';
+import 'package:mobicom/features/exercises/exercise_details_screen.dart';
+import 'package:mobicom/features/exercises/exercuse_list_item.dart';
+import 'package:mobicom/models/exercise.dart';
+import 'package:mobicom/widgets/full_screen.dart';
+import 'package:shimmer/shimmer.dart';
 
-class ExercisesScreen extends StatelessWidget {
-const ExercisesScreen({ Key? key }) : super(key: key);
-     static String name ="/exercisesscreen";
+class ExerciseScreen extends StatefulWidget {
+  static String name ="exercise";
   @override
-  Widget build(BuildContext context){
+  State<ExerciseScreen> createState() => _ExerciseScreenState();
+}
+
+class _ExerciseScreenState extends State<ExerciseScreen> {
+  final ExerciseController exerciseController = Get.put(ExerciseController());
+
+  @override
+  void initState() {
+    super.initState();
+    fetchExercises();
+  }
+
+  fetchExercises() async {
+    await exerciseController.fetchExercises(context);
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Exercise Screen'),
+        title: Text(
+          'Exercises',
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        ),
       ),
-      body: Container(),
+      body: RefreshIndicator(
+        onRefresh: () async {
+          await fetchExercises();
+        },
+        child: Obx(
+          () => exerciseController.isLoading.value
+              ? Center(child: CircularProgressIndicator())
+              : ListView.builder(
+                  itemCount: exerciseController.exercises.length,
+                  itemBuilder: (context, index) {
+                    Exercise exercise = exerciseController.exercises[index];
+                    return ExerciseListItem(exercise: exercise);
+                  },
+                ),
+        ),
+      ),
     );
   }
 }

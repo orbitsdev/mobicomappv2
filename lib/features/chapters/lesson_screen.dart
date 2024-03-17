@@ -49,7 +49,7 @@ class LessonScreen extends StatelessWidget {
                         fit: BoxFit.cover,
                       ),
                     SizedBox(height: 16),
-                    MardownViewer(description: lesson?.content ?? ''),
+                    MarkdownViewer(description: lesson?.content ?? ''),
                   ],
                 ),
               ),
