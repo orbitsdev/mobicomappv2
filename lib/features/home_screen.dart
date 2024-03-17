@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
+import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:mobicom/controllers/auth_controller.dart';
 import 'package:mobicom/features/home/chapter_page.dart';
@@ -41,12 +42,11 @@ class _HomeScreenState extends State<HomeScreen> {
         child: ListView(
           padding: EdgeInsets.zero,
           children: <Widget>[
-            DrawerHeader(
-              decoration: BoxDecoration(
-                color: Color(0xfff7d336),
-              ),
-              child: UserInfoWidget(), // Custom user info widget
-            ),
+            SizedBox(height: 20,),
+            Container(
+              color: Colors.black,
+              padding: EdgeInsets.all(16),
+              child:  UserInfoWidget(),),
             ListTile(
               leading: Icon(Icons.logout), // Use the logout icon
               title: Text('Logout'),

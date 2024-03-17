@@ -3,8 +3,8 @@ import 'dart:convert';
 
 class TakedExercise {
 int? id;
-    int? student_id;
-    int? excercise_id;
+int? student_id;
+int? excercise_id;
   TakedExercise({
     this.id,
     this.student_id,

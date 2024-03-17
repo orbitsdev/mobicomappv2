@@ -103,7 +103,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               TextButton(
                 onPressed: () {
-                  Get.toNamed(RegisterScreen.name);
+                  Get.to(()=>RegisterScreen()); 
                 },
                 child: Text(
                   'Don\'t have an account? Register here',

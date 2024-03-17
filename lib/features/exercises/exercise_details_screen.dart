@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mobicom/controllers/auth_controller.dart';
+import 'package:mobicom/controllers/exercise_controller.dart';
 import 'package:mobicom/models/exercise.dart';
 import 'package:mobicom/services/api.dart';
 import 'package:mobicom/widgets/mardown_viewer.dart';
@@ -18,6 +20,8 @@ class ExerciseDetailsScreen extends StatefulWidget {
 }
 
 class _ExerciseDetailsScreenState extends State<ExerciseDetailsScreen> {
+  var exercisecontroller = Get.find<ExerciseController>();
+  var authController = Get.find<AuthController>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -78,30 +82,29 @@ class _ExerciseDetailsScreenState extends State<ExerciseDetailsScreen> {
   }
 
   void _showStartExamDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Take Exercise'),
-          content: Text('Are you sure you want to start the Exercise?'),
-          actions: [
-            TextButton(
-              onPressed: () {
-                // Call takeExercise when the user clicks Yes
-                // takeExercise(widget.exercise.id!);
-                Get.back();
-              },
-              child: Text('Yes'),
-            ),
-            TextButton(
-              onPressed: () {
-                Get.back();
-              },
-              child: Text('No'),
-            ),
-          ],
-        );
-      },
-    );
-  }
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text('Take Exercise'),
+        content: Text('Are you sure you want to start the Exercise?'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              // Ensure the exercise id is passed as a string
+              exercisecontroller.takeExercise(context, '${widget.exercise.id}');
+            },
+            child: Text('Yes'),
+          ),
+          TextButton(
+            onPressed: () {
+              Get.back();
+            },
+            child: Text('No'),
+          ),
+        ],
+      );
+    },
+  );
+}
 }

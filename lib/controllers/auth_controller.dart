@@ -39,6 +39,7 @@ class AuthController extends GetxController {
     if (responseData['success']) {
       // print(responseData['data']['data']);
       user(User.fromMap(responseData['data'] as Map<String, dynamic>));
+      // print(responseData)
       await prefs.setString('user', user.toJson());
       user(User.fromMap(responseData['data'] as Map<String, dynamic>));
       print(user.toJson());

@@ -42,7 +42,7 @@ if (userData != null) {
   var authController = Get.find<AuthController>();
   var user = User.stringToModel(userMap); // Create a User object from the map
   authController.user(user); 
-  print(user.toJson());// Set the user in the AuthController
+  
 }
 
 
