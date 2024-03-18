@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+// import 'package:image_picker/image_picker.dart';
 import 'package:mobicom/controllers/auth_controller.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +12,44 @@ import 'package:mobicom/controllers/auth_controller.dart';
 class UserInfoWidget extends StatelessWidget {
   final authController = Get.find<AuthController>();
 
+  //  final ImagePicker _picker = ImagePicker();
+   
+// Future<void> _showImagePickerBottomSheet(BuildContext context) async {
+//     await showModalBottomSheet(
+//       context: context,
+//       builder: (BuildContext context) {
+//         return Column(
+//           mainAxisSize: MainAxisSize.min,
+//           children: [
+//             ListTile(
+//               leading: Icon(Icons.photo_library),
+//               title: Text('Gallery'),
+//               onTap: () async {
+//                 final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+//                 if (image != null) {
+//                   // Call function to upload profile image
+//                   await authController.uploadProfileImage(context, File(image.path));
+//                 }
+//                 Get.back(); // Close bottom sheet
+//               },
+//             ),
+//             ListTile(
+//               leading: Icon(Icons.camera_alt),
+//               title: Text('Camera'),
+//               onTap: () async {
+//                 final XFile? image = await _picker.pickImage(source: ImageSource.camera);
+//                 if (image != null) {
+//                   // Call function to upload profile image
+//                   await authController.uploadProfileImage(context, File(image.path));
+//                 }
+//                 Get.back(); // Close bottom sheet
+//               },
+//             ),
+//           ],
+//         );
+//       },
+//     );
+//   }
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -16,6 +57,8 @@ class UserInfoWidget extends StatelessWidget {
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
+
+        
         CachedNetworkImage(
           imageUrl: authController.user.value.image ?? '',
           imageBuilder: (context, imageProvider) => CircleAvatar(

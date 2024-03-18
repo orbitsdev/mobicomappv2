@@ -14,6 +14,7 @@ class Api {
   static String chapter_lessons = "${Env.APP_URL_PRODUCTION}api/chapter/lessons";
   static String exercises = "${Env.APP_URL_PRODUCTION}api/exercises";
   static String take = "${Env.APP_URL_PRODUCTION}api/exercise/take";
+  static String uploadProfile = "${Env.APP_URL_PRODUCTION}api/upload-profile-image";
   
 
   

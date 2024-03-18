@@ -53,7 +53,7 @@ class ExerciseController extends GetxController {
         taked_exercise(taked);
         print(taked_exercise.toJson());
 
-        Get.to(() => AnswerScreen(
+        Get.off(() => AnswerScreen(
               takedExercise: taked,
             )); // Dismiss loading dialog
         return right(null);

@@ -31,6 +31,39 @@ class User {
     this.teacher_full_name,
   });
 
+  User copyWith({
+  int? id,
+  int? student_id,
+  String? section,
+  String? teacher_full_name,
+  String? first_name,
+  String? last_name,
+  String? email,
+  String? full_name,
+  String? role,
+  String? image,
+  String? created_at,
+  String? updated_at,
+  String? token,
+}) {
+  return User(
+    id: id ?? this.id,
+    student_id: student_id ?? this.student_id,
+    section: section ?? this.section,
+    teacher_full_name: teacher_full_name ?? this.teacher_full_name,
+    first_name: first_name ?? this.first_name,
+    last_name: last_name ?? this.last_name,
+    email: email ?? this.email,
+    full_name: full_name ?? this.full_name,
+    role: role ?? this.role,
+    image: image ?? this.image,
+    created_at: created_at ?? this.created_at,
+    updated_at: updated_at ?? this.updated_at,
+    token: token ?? this.token,
+  );
+}
+
+
   factory User.fromMap(Map<String, dynamic> map) {
     var user = map['data'];
     var token = map['token'];
