@@ -33,7 +33,7 @@ EitherModel<String?> uploadProfileImage(BuildContext context, File imageFile) as
       Dialogs.showLoadingDialog(context); // Show loading dialog
 
       // Create multipart request for uploading the image
-      var request = http.MultipartRequest('POST', Uri.parse(Api.uploadProfile));
+      var request = http.MultipartRequest('POST', Uri.parse(Api.upload_profile_production));
       request.fields['user_id'] = user.value.id.toString();
       request.files.add(await http.MultipartFile.fromPath('image', imageFile.path));
 
@@ -83,7 +83,7 @@ EitherModel<String?> uploadProfileImage(BuildContext context, File imageFile) as
     try {
       Dialogs.showLoadingDialog(context); // Show loading dialog
 
-      final response = await http.post(Uri.parse(Api.login), body: formData);
+      final response = await http.post(Uri.parse(Api.login_production), body: formData);
       final responseData = jsonDecode(response.body);
 
       if (responseData['success']) {
@@ -139,7 +139,7 @@ EitherModel<String?> uploadProfileImage(BuildContext context, File imageFile) as
       if (accessToken != null) {
         // Make API call to logout
         final response = await http.post(
-          Uri.parse(Api.logout),
+          Uri.parse(Api.logout_production),
           headers: {'Authorization': 'Bearer $accessToken'},
         );
 
@@ -190,7 +190,7 @@ EitherModel<String?> uploadProfileImage(BuildContext context, File imageFile) as
     try {
       // Initialize SharedPreferences
 
-      var response = await http.post(Uri.parse(Api.register), body: data);
+      var response = await http.post(Uri.parse(Api.register_production), body: data);
       var responseData = jsonDecode(response.body);
 
       if (responseData['success']) {

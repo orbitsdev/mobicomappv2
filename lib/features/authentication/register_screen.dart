@@ -32,7 +32,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   Future<void> _fetchSections() async {
-    final response = await http.get(Uri.parse(Api.sections));
+    final response = await http.get(Uri.parse(Api.sections_production));
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = jsonDecode(response.body);
       final List<dynamic> sections = data['data']['data'];

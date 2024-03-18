@@ -10,7 +10,11 @@ import 'package:mobicom/features/exercises/answer_screen.dart';
 import 'package:mobicom/features/exercises/question_page.dart';
 import 'package:mobicom/modals/dialogs.dart';
 import 'package:mobicom/models/exercise.dart';
+import 'package:mobicom/models/fill_in_the_blank_question.dart';
+import 'package:mobicom/models/multiple_choice_question.dart';
 import 'package:mobicom/models/taked_exercise.dart';
+import 'package:mobicom/models/true_or_false_question.dart';
+import 'package:mobicom/models/whole_exercise.dart';
 import 'package:mobicom/services/api.dart';
 import 'package:http/http.dart' as http;
 
@@ -20,6 +24,68 @@ class ExerciseController extends GetxController {
   final authController = Get.find<AuthController>();
 
   var taked_exercise = TakedExercise().obs;
+
+  EitherModel<String?> fetchExerciseWithQuestion(Exercise exercise) async {
+    try {
+      final response = await http.get(Uri.parse(  Api.exercise_questions_production + '?exercise_id=${exercise.id}'));
+
+      final responseData = jsonDecode(response.body);
+      // print(responseData['success']);
+      if (responseData['success']) {
+
+     
+
+
+          WholeExercise wholeexercise = WholeExercise.fromMap(responseData['data']['data']);
+          print(wholeexercise.toJson());
+        // MultipleChoiceQuestion multi = MultipleChoiceQuestion.fromMap(responseData['data']['data']['questions'][0]);
+        //  print(multi.toJson());
+        //  print(multi.correct_answer);
+
+
+  // TrueOrFalseQuestion multi = TrueOrFalseQuestion.fromMap(responseData['data']['data']['questions'][0]);
+  //        print(multi.toJson());
+       
+
+
+       
+
+        // print(responseData['data']['data']['questions'][0]);
+
+        // TrueOrFalseQuestion kk =  TrueOrFalseQuestion();
+        // kk.id = responseData['data']['data']['questions'][0]['id'];
+        // kk.question = responseData['data']['data']['questions'][0]['question'];
+        // kk.correct_answer = responseData['data']['data']['questions'][0]['correct_answer'];
+
+        // print(responseData['data']['data']['questions']['id']);
+        
+//        TrueOrFalseQuestion trues = TrueOrFalseQuestion.fromMap(responseData['data']['data']['questions'][0]);
+
+// print('ID: ${trues.toJson()}');
+// print('Question: ${trues.question}');
+// print('Question Number: ${trues.question_number}');
+// print('Correct Answer: ${trues.correct_answer}');
+
+        // FillInTheBlankQuestion multi = FillInTheBlankQuestion.fromMap(responseData['data']['data']['questions'][0]);
+        // var multi = TrueOrFalseQuestion.fromMap(
+        //     responseData['data']['data']['questions'][0]);
+
+        // print('ID: ${multi.id}');
+        // print('Question: ${multi.question}');
+        // print('Question Number: ${multi.question_number}');
+        // print('Correct Answer: ${multi.correct_answer}');
+      }
+
+      return right('success');
+    } on SocketException catch (e) {
+      return left('Network error: ${e.message}');
+    } catch (e) {
+      //
+      isLoading(false);
+      return left('Error: ${e.toString()}');
+    }
+  }
+
   EitherModel<String?> takeExercise(
       BuildContext context, String exerciseId) async {
     Get.back();
@@ -34,7 +100,7 @@ class ExerciseController extends GetxController {
 
       print(formData);
       final response = await http.post(
-        Uri.parse(Api.take),
+        Uri.parse(Api.take_production),
         headers: {
           'Authorization': 'Bearer ${authController.user.value.token}',
         },
@@ -53,7 +119,7 @@ class ExerciseController extends GetxController {
         taked_exercise(taked);
         print(taked_exercise.toJson());
 
-        Get.off(() => AnswerScreen(
+        Get.to(() => AnswerScreen(
               takedExercise: taked,
             )); // Dismiss loading dialog
         return right(null);
@@ -78,7 +144,7 @@ class ExerciseController extends GetxController {
 
   EitherModel<String?> fetchExercises(BuildContext context) async {
     try {
-      var response = await http.get(Uri.parse(Api.exercises));
+      var response = await http.get(Uri.parse(Api.exercises_production));
       var responseData = jsonDecode(response.body);
 
       if (responseData['success']) {

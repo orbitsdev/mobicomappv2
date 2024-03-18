@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mobicom/controllers/exercise_controller.dart';
 import 'package:mobicom/features/exercises/exercise_details_screen.dart';
 import 'package:mobicom/models/exercise.dart';
 
