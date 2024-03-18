@@ -24,67 +24,35 @@ class ExerciseController extends GetxController {
   final authController = Get.find<AuthController>();
 
   var taked_exercise = TakedExercise().obs;
+  var wholeExercise = WholeExercise().obs;
 
-  EitherModel<String?> fetchExerciseWithQuestion(Exercise exercise) async {
-    try {
-      final response = await http.get(Uri.parse(  Api.exercise_questions_production + '?exercise_id=${exercise.id}'));
-
+ 
+EitherModel<String?> fetchExerciseWithQuestion(Exercise exercise) async {
+  try {
+    final response = await http.get(Uri.parse(Api.exercise_questions_production + '?exercise_id=${exercise.id}'));
+    
+  
       final responseData = jsonDecode(response.body);
-      // print(responseData['success']);
+      
       if (responseData['success']) {
-
-     
-
-
-          WholeExercise wholeexercise = WholeExercise.fromMap(responseData['data']['data']);
-          print(wholeexercise.toJson());
-        // MultipleChoiceQuestion multi = MultipleChoiceQuestion.fromMap(responseData['data']['data']['questions'][0]);
-        //  print(multi.toJson());
-        //  print(multi.correct_answer);
-
-
-  // TrueOrFalseQuestion multi = TrueOrFalseQuestion.fromMap(responseData['data']['data']['questions'][0]);
-  //        print(multi.toJson());
-       
-
-
-       
-
-        // print(responseData['data']['data']['questions'][0]);
-
-        // TrueOrFalseQuestion kk =  TrueOrFalseQuestion();
-        // kk.id = responseData['data']['data']['questions'][0]['id'];
-        // kk.question = responseData['data']['data']['questions'][0]['question'];
-        // kk.correct_answer = responseData['data']['data']['questions'][0]['correct_answer'];
-
-        // print(responseData['data']['data']['questions']['id']);
-        
-//        TrueOrFalseQuestion trues = TrueOrFalseQuestion.fromMap(responseData['data']['data']['questions'][0]);
-
-// print('ID: ${trues.toJson()}');
-// print('Question: ${trues.question}');
-// print('Question Number: ${trues.question_number}');
-// print('Correct Answer: ${trues.correct_answer}');
-
-        // FillInTheBlankQuestion multi = FillInTheBlankQuestion.fromMap(responseData['data']['data']['questions'][0]);
-        // var multi = TrueOrFalseQuestion.fromMap(
-        //     responseData['data']['data']['questions'][0]);
-
-        // print('ID: ${multi.id}');
-        // print('Question: ${multi.question}');
-        // print('Question Number: ${multi.question_number}');
-        // print('Correct Answer: ${multi.correct_answer}');
+        WholeExercise fetch_data = WholeExercise.fromMap(responseData['data']['data']);
+        wholeExercise(fetch_data);
+        print(wholeExercise.toJson());
+        return right('success');
+      } else {
+        // Handle error when the response is successful but 'success' is false
+        return left('Error: ${responseData['message']}');
       }
-
-      return right('success');
-    } on SocketException catch (e) {
-      return left('Network error: ${e.message}');
-    } catch (e) {
-      //
-      isLoading(false);
-      return left('Error: ${e.toString()}');
-    }
+    
+  } on SocketException catch (e) {
+    // Handle network error
+    return left('Network error: ${e.message}');
+  } catch (e) {
+    // Handle other exceptions
+    isLoading(false);
+    return left('Error: ${e.toString()}');
   }
+}
 
   EitherModel<String?> takeExercise(
       BuildContext context, String exerciseId) async {
