@@ -13,7 +13,7 @@ import 'dart:convert';
 class ResultController extends GetxController {
   final authController = Get.find<AuthController>();
   var results = <WholeResult>[].obs;
-   var isLoading = false.obs; // Add isLoading flag
+  var isLoading = false.obs; // Add isLoading flag
 
   Future<void> getStudentExercises(BuildContext context) async { // Change return type to void
     isLoading.value = true; // Set isLoading to true when starting the API call
@@ -21,10 +21,12 @@ class ResultController extends GetxController {
       var response = await http.get(Uri.parse(Api.student_exercises + '?student_id=${authController.user.value.student_id}'));
       var responseData = jsonDecode(response.body);
 
+      print(responseData['data']);
+
       if (responseData['success']) {
         List<dynamic> data = responseData['data'];
         List<WholeResult> fetchedResults = data.map((item) => WholeResult.fromMap(item)).toList();
-        results.assignAll(fetchedResults);
+        // results.assignAll(fetchedResults);
         isLoading.value = false; // Set isLoading to false after successfully fetching data
       } else {
         Dialogs.showErrorDialog(context, 'Something went wrong');

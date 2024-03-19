@@ -19,6 +19,7 @@ class Api {
   static String exercise_questions_production = "${Env.APP_URL_PRODUCTION}api/exercise/questions";
   static String take_exercise = "${Env.APP_URL_PRODUCTION}api/take/exercise";
   static String student_exercises = "${Env.APP_URL_PRODUCTION}api/student-exercises";
+  static String view_score = "${Env.APP_URL_PRODUCTION}api/view-score";
   
 
   

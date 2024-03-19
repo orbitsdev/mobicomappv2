@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:mobicom/features/exercises/answer_screen.dart';
+import 'package:mobicom/features/results/whole_result_screen.dart';
 import 'package:mobicom/models/whole_result.dart';
 
 class WholeResultCard extends StatelessWidget {
@@ -11,9 +14,9 @@ class WholeResultCard extends StatelessWidget {
     return Card(
       elevation: 4,
       margin: EdgeInsets.all(8),
-      color: Theme.of(context).cardColor, // Use theme's card color
+      color: Colors.black,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12), // Rounded corners
+        borderRadius: BorderRadius.circular(12),
       ),
       child: Padding(
         padding: EdgeInsets.all(16),
@@ -21,11 +24,11 @@ class WholeResultCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              wholeResult.exercise_name,
+              '${wholeResult.exercise_name}',
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
-                color: Theme.of(context).textTheme.headline6?.color, // Use theme's headline color
+                color: Theme.of(context).textTheme.headline6?.color,
               ),
             ),
             SizedBox(height: 8),
@@ -33,62 +36,38 @@ class WholeResultCard extends StatelessWidget {
               'Exercise Type: ${wholeResult.exercise_type}',
               style: TextStyle(
                 fontSize: 16,
-                color: Theme.of(context).textTheme.bodyText1?.color, // Use theme's body text color
+                color: Theme.of(context).textTheme.bodyText1?.color,
               ),
             ),
-            SizedBox(height: 8),
-            // Text(
-            //   'Student Name: ${wholeResult.student_name}',
-            //   style: TextStyle(
-            //     fontSize: 16,
-            //     color: Theme.of(context).textTheme.bodyText1?.color, // Use theme's body text color
-            //   ),
-            // ),
             SizedBox(height: 8),
             Text(
-              'Total Questions: ${wholeResult.total_questions}',
+              'Total Questions & Score: ${wholeResult.total_questions} / ${wholeResult.total_score}',
               style: TextStyle(
                 fontSize: 16,
-                color: Theme.of(context).textTheme.bodyText1?.color, // Use theme's body text color
+                color: Theme.of(context).textTheme.bodyText1?.color,
               ),
             ),
-            // SizedBox(height: 8),
-            // Text(
-            //   'Total Score: ${wholeResult.total_score}',
-            //   style: TextStyle(
-            //     fontSize: 16,
-            //     color: Theme.of(context).textTheme.bodyText1?.color, // Use theme's body text color
-            //   ),
-            // ),
-            // SizedBox(height: 8),
-            // Text(
-            //   'Total Mistake: ${wholeResult.total_mistake}',
-            //   style: TextStyle(
-            //     fontSize: 16,
-            //     color: Theme.of(context).textTheme.bodyText1?.color, // Use theme's body text color
-            //   ),
-            // ),
-            // SizedBox(height: 8),
+            SizedBox(height: 8),
             Text(
               'Date: ${wholeResult.created_at}',
               style: TextStyle(
                 fontSize: 16,
-                color: Theme.of(context).textTheme.bodyText1?.color, // Use theme's body text color
+                color: Theme.of(context).textTheme.bodyText1?.color,
               ),
             ),
             SizedBox(height: 16),
             ElevatedButton(
-              onPressed: () {
-                // Navigate to the whole details page
+              onPressed: () { 
+                 Get.to(()=> WholeResultScreen());
               },
               style: ElevatedButton.styleFrom(
- // Use theme's accent color for button background
+                backgroundColor: Colors.black
               ),
               child: Text(
                 'View More Details',
                 style: TextStyle(
                   fontSize: 16,
-                  color: Colors.white, // Custom button text color
+                  color: Colors.white,
                 ),
               ),
             ),
