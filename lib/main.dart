@@ -12,6 +12,7 @@ import 'package:mobicom/features/chapters/chapter_screen.dart';
 import 'package:mobicom/features/chapters/lesson_screen.dart';
 import 'package:mobicom/features/exercises/exercises_screen.dart';
 import 'package:mobicom/features/home_screen.dart';
+import 'package:mobicom/features/test_question_page.dart';
 import 'package:mobicom/middleware/auth_middleware.dart';
 import 'package:mobicom/middleware/not_login_middleware.dart';
 import 'package:mobicom/models/user.dart';
@@ -82,6 +83,11 @@ class MyApp extends StatelessWidget {
         GetPage(
           name: LoginScreen.name,
           page: () => LoginScreen(),
+          transition: Transition.cupertino,
+        ),
+        GetPage(
+          name: TestQuestionPage.name,
+          page: () => TestQuestionPage(),
           transition: Transition.cupertino,
         ),
       ],

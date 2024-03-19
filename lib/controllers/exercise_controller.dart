@@ -8,8 +8,12 @@ import 'package:mobicom/constant/typdef.dart';
 import 'package:mobicom/controllers/auth_controller.dart';
 import 'package:mobicom/features/exercises/answer_screen.dart';
 import 'package:mobicom/features/exercises/question_page.dart';
+import 'package:mobicom/features/exercises/result_screen.dart';
+import 'package:mobicom/features/home_screen.dart';
 import 'package:mobicom/modals/dialogs.dart';
+import 'package:mobicom/models/Result.dart';
 import 'package:mobicom/models/exercise.dart';
+import 'package:mobicom/models/exercise_answer.dart';
 import 'package:mobicom/models/fill_in_the_blank_question.dart';
 import 'package:mobicom/models/multiple_choice_question.dart';
 import 'package:mobicom/models/taked_exercise.dart';
@@ -25,34 +29,95 @@ class ExerciseController extends GetxController {
 
   var taked_exercise = TakedExercise().obs;
   var wholeExercise = WholeExercise().obs;
-
- 
-EitherModel<String?> fetchExerciseWithQuestion(Exercise exercise) async {
+EitherModel<String?> submitExerciseAnswers(BuildContext context, ExerciseSubmission exerciseSubmission) async {
   try {
-    final response = await http.get(Uri.parse(Api.exercise_questions_production + '?exercise_id=${exercise.id}'));
-    
+    Dialogs.showLoadingDialog(context); // Show loading dialog
+    // Convert ExerciseSubmission object to JSON string
+    String exerciseSubmissionJson = jsonEncode(exerciseSubmission.toJson());
   
+    // Send POST request with JSON body
+    final http.Response response = await http.post(
+      Uri.parse(Api.take_exercise),
+      headers: {'Content-Type': 'application/json'}, // Add content type header
+      body: exerciseSubmissionJson,
+    );
+
+    Navigator.pop(context); // Dismiss the loading dialog
+
+    final responseData = jsonDecode(response.body);
+    
+    // Check response status code
+    if (responseData['success']) {
+ 
+  // Navigate to ResultScreen and remove all previous routes from the stack
+  Result result = Result.fromMap(responseData['data']['data']);
+
+// Navigate to ResultScreen and remove all previous routes from the stack
+  
+
+// Navigate to ResultScreen and remove all routes until the home screen
+Get.offUntil(
+  GetPageRoute(
+    settings: RouteSettings(name: '/result'),
+    page: () => ResultScreen(result:result),
+  ),
+  ModalRoute.withName(HomeScreen.name),
+);
+
+
+
+  
+  // Successful submission
+  print('Exercise answers submitted successfully');
+  return right('success');
+} else {
+  // Failed submission, handle error
+  String errorMessage = responseData['message'] ?? 'Unknown error occurred';
+  Dialogs.showErrorDialog(context, errorMessage);
+  return left(errorMessage);
+}
+  } on SocketException catch (e) {
+    Navigator.pop(context); // Dismiss the loading dialog
+    Dialogs.showErrorDialog(context, 'Network error: ${e.message}');
+    // Handle network errors
+    return left('Network error: ${e.message}');
+  } catch (error) {
+    Navigator.pop(context); // Dismiss the loading dialog
+    Dialogs.showErrorDialog(context, 'Error: $error');
+    // Handle other exceptions
+    return left('Error: $error');
+  }
+}
+  
+ 
+  EitherModel<String?> fetchExerciseWithQuestion(
+      BuildContext context, Exercise exercise) async {
+    try {
+      final response = await http.get(Uri.parse(
+          Api.exercise_questions_production + '?exercise_id=${exercise.id}'));
+
       final responseData = jsonDecode(response.body);
-      
+
       if (responseData['success']) {
-        WholeExercise fetch_data = WholeExercise.fromMap(responseData['data']['data']);
+        WholeExercise fetch_data =
+            WholeExercise.fromMap(responseData['data']['data']);
         wholeExercise(fetch_data);
-        print(wholeExercise.toJson());
         return right('success');
       } else {
         // Handle error when the response is successful but 'success' is false
         return left('Error: ${responseData['message']}');
       }
-    
-  } on SocketException catch (e) {
-    // Handle network error
-    return left('Network error: ${e.message}');
-  } catch (e) {
-    // Handle other exceptions
-    isLoading(false);
-    return left('Error: ${e.toString()}');
+    } on SocketException catch (e) {
+      // Handle network error
+      Dialogs.showErrorDialog(context, e.message);
+      return left('Network error: ${e.message}');
+    } catch (e) {
+      // Handle other exceptions
+      isLoading(false);
+      Dialogs.showErrorDialog(context, e.toString());
+      return left('Error: ${e.toString()}');
+    }
   }
-}
 
   EitherModel<String?> takeExercise(
       BuildContext context, String exerciseId) async {

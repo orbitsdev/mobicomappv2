@@ -8,6 +8,7 @@ import 'package:http/http.dart' as http;
 import 'package:mobicom/controllers/auth_controller.dart';
 import 'package:mobicom/controllers/exercise_controller.dart';
 import 'package:mobicom/features/exercises/question_page.dart';
+import 'package:mobicom/features/test_question_page.dart';
 import 'package:mobicom/models/exercise.dart';
 import 'package:mobicom/services/api.dart';
 import 'package:mobicom/widgets/mardown_viewer.dart';
@@ -81,7 +82,8 @@ class ExerciseDetailsScreen extends StatelessWidget {
             height: 55,
             child: ElevatedButton.icon(
               onPressed: () {
-                Get.to(() => QuestionPage(exercise: exercise));
+                Get.to(() => QuestionPage(exercise: exercise,));
+                // Get.to(() => TestQuestionPage());
                 // _showStartExamDialog(context);
               },
               icon: Icon(Icons.play_arrow), // You can change this to any relevant icon
