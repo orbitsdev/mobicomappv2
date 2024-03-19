@@ -1,6 +1,7 @@
 class ExerciseAnswer {
   int question_id;
   String answer;
+  
 
   ExerciseAnswer({
     required this.question_id,

@@ -24,10 +24,10 @@ class ResultScreen extends StatelessWidget {
               delegate: SliverChildListDelegate([
                 _buildDetailItem('Exercise Name', result.exercise_name),
                 _buildDetailItem('Exercise Type', result.exercise_type),
-                _buildDetailItem('Student Name', result.student_name),
+                // _buildDetailItem('Student Name', result.student_name),
                 _buildDetailItem('Total Questions', result.total_questions.toString()),
-                _buildDetailItem('Total Score', result.total_score.toString()),
-                _buildDetailItem('Total Mistakes', result.total_mistake.toString()),
+                // _buildDetailItem('Total Score', result.total_score.toString()),
+                // _buildDetailItem('Total Mistakes', result.total_mistake.toString()),
                 _buildDetailItem('Date', result.created_at),
               ]),
             ),

@@ -77,57 +77,42 @@ EitherModel<String?> uploadProfileImage(BuildContext context, File imageFile) as
   }
 
 
-  EitherModel<String?> login(
-      BuildContext context, Map<String, dynamic> formData) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    try {
-      Dialogs.showLoadingDialog(context); // Show loading dialog
+  EitherModel<String?> login(BuildContext context, Map<String, dynamic> formData) async {
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  try {
+    Dialogs.showLoadingDialog(context); // Show loading dialog
 
-      final response = await http.post(Uri.parse(Api.login_production), body: formData);
-      final responseData = jsonDecode(response.body);
-
-      if (responseData['success']) {
-        // print(responseData['data']['data']);
-        user(User.fromMap(responseData['data'] as Map<String, dynamic>));
-        // print(responseData)
-        await prefs.setString('user', user.toJson());
-        user(User.fromMap(responseData['data'] as Map<String, dynamic>));
-        print(user.toJson());
-
-        if (user.value.token!.isNotEmpty) {
-          // Dismiss loading dialog before navigating
-          Get.back();
-          Get.offAll(() => HomeScreen(), transition: Transition.cupertino);
-        }
-
-        return right(null);
-      } else {
-        Map<String, dynamic> errors = responseData['error'] ?? {};
-        String errorMessage = '';
-
-        if (errors.isNotEmpty) {
-          if (errors.containsKey('email')) {
-            errorMessage = errors['email'][0];
-          } else if (errors.containsKey('password')) {
-            errorMessage = errors['password'][0];
-          } else {
-            print(errors);
-          }
-          Dialogs.showErrorDialog(context, errorMessage);
-        }
-        return left('Login failed');
-      }
-    } on SocketException catch (e) {
-      Dialogs.showErrorDialog(context, e.message);
-      return left('Network error: ${e.message}');
-    } catch (e) {
-      Dialogs.showErrorDialog(context, e.toString());
-      return left('Error: ${e.toString()}');
-    } finally {
-      // Dismiss loading dialog if it's still shown
+    final response = await http.post(Uri.parse(Api.login_production), body: formData);
+    final responseData = jsonDecode(response.body);
+     
+    if (responseData['success']) {
+      user(User.fromMap(responseData['data'] as Map<String, dynamic>));
+      await prefs.setString('user', user.toJson());
+      print(user.toJson());
       Get.back();
+      if (user.value.token!.isNotEmpty) {
+        Get.offAll(() => HomeScreen(), transition: Transition.cupertino);
+      }
+
+      return right(null);
+    } else {
+         Get.back();
+    final dynamic errorData = responseData['error'];
+final errorMessage = errorData != null ? errorData.toString() : 'Login failed';
+Dialogs.showErrorDialog(context, errorMessage);
+return left(errorMessage);
     }
+
+  } on SocketException catch (e) {
+    Get.back();
+    Dialogs.showErrorDialog(context, 'Network error: ${e.message}');
+    return left('Network error: ${e.message}');
+  } catch (e) {
+    Get.back();
+    Dialogs.showErrorDialog(context, 'Error: ${e.toString()}');
+    return left('Error: ${e.toString()}');
   }
+}
 
   Future<void> logout(BuildContext context) async {
     try {

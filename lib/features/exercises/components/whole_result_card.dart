@@ -37,13 +37,13 @@ class WholeResultCard extends StatelessWidget {
               ),
             ),
             SizedBox(height: 8),
-            Text(
-              'Student Name: ${wholeResult.student_name}',
-              style: TextStyle(
-                fontSize: 16,
-                color: Theme.of(context).textTheme.bodyText1?.color, // Use theme's body text color
-              ),
-            ),
+            // Text(
+            //   'Student Name: ${wholeResult.student_name}',
+            //   style: TextStyle(
+            //     fontSize: 16,
+            //     color: Theme.of(context).textTheme.bodyText1?.color, // Use theme's body text color
+            //   ),
+            // ),
             SizedBox(height: 8),
             Text(
               'Total Questions: ${wholeResult.total_questions}',
@@ -52,23 +52,23 @@ class WholeResultCard extends StatelessWidget {
                 color: Theme.of(context).textTheme.bodyText1?.color, // Use theme's body text color
               ),
             ),
-            SizedBox(height: 8),
-            Text(
-              'Total Score: ${wholeResult.total_score}',
-              style: TextStyle(
-                fontSize: 16,
-                color: Theme.of(context).textTheme.bodyText1?.color, // Use theme's body text color
-              ),
-            ),
-            SizedBox(height: 8),
-            Text(
-              'Total Mistake: ${wholeResult.total_mistake}',
-              style: TextStyle(
-                fontSize: 16,
-                color: Theme.of(context).textTheme.bodyText1?.color, // Use theme's body text color
-              ),
-            ),
-            SizedBox(height: 8),
+            // SizedBox(height: 8),
+            // Text(
+            //   'Total Score: ${wholeResult.total_score}',
+            //   style: TextStyle(
+            //     fontSize: 16,
+            //     color: Theme.of(context).textTheme.bodyText1?.color, // Use theme's body text color
+            //   ),
+            // ),
+            // SizedBox(height: 8),
+            // Text(
+            //   'Total Mistake: ${wholeResult.total_mistake}',
+            //   style: TextStyle(
+            //     fontSize: 16,
+            //     color: Theme.of(context).textTheme.bodyText1?.color, // Use theme's body text color
+            //   ),
+            // ),
+            // SizedBox(height: 8),
             Text(
               'Date: ${wholeResult.created_at}',
               style: TextStyle(

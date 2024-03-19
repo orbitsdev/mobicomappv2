@@ -145,50 +145,50 @@ class _QuestionPageState extends State<QuestionPage> {
     if (question is MultipleChoiceQuestion) {
       return MultipleChoiceQuestionWidget(
         question: question,
-        index: index,
+        index: question.id as int,
       );
     } else if (question is TrueOrFalseQuestion) {
       return TrueOrFalseQuestionWidget(
         question: question,
-        index: index,
+        index: question.id as int,
       );
     } else if (question is FillInTheBlankQuestion) {
       return FillInTheBlankQuestionWidget(
         question: question,
-        index: index,
+        index: question.id as int,
       );
     } else {
       return SizedBox(); // Return an empty widget or handle unknown question types
     }
   }
 
-  // Function to convert form data to ExerciseSubmission object
   ExerciseSubmission convertFormDataToExerciseSubmission(
-      Map<String, dynamic> formData) {
-    // Extract the exerciseId and studentId from the form data
-    int exerciseId = widget.exercise.id as int;
-    int studentId = authController.user.value.student_id as int; // Replace with the actual student ID
+    Map<String, dynamic> formData) {
+  // Extract the exerciseId and studentId from the form data
+  int exerciseId = widget.exercise.id as int;
+  int studentId = authController.user.value.student_id as int;
 
-    // Extract the answers from the form data and map them to ExerciseAnswer objects
-    List<ExerciseAnswer> answers = [];
+  // Extract the answers from the form data and map them to ExerciseAnswer objects
+  List<ExerciseAnswer> answers = [];
+  
+  formData.forEach((key, value) {
+    // Assuming form fields are named as 'question_<questionId>'
+    if (key.startsWith('question_')) {
+      int questionId = int.parse(key.substring('question_'.length));
+      ExerciseAnswer answer = ExerciseAnswer(
+        question_id: questionId, // Use question ID instead of index
+        answer: value.toString(),
+      );
+      answers.add(answer);
+    }
+  });
 
-    formData.forEach((key, value) {
-      // Assuming form fields are named as 'question_<index>'
-      if (key.startsWith('question_')) {
-        int questionId = int.parse(key.substring('question_'.length));
-        ExerciseAnswer answer = ExerciseAnswer(
-          question_id: questionId,
-          answer: value.toString(),
-        );
-        answers.add(answer);
-      }
-    });
+  // Create and return an ExerciseSubmission object
+  return ExerciseSubmission(
+    exerciseId: exerciseId,
+    studentId: studentId,
+    answers: answers,
+  );
+}
 
-    // Create and return an ExerciseSubmission object
-    return ExerciseSubmission(
-      exerciseId: exerciseId,
-      studentId: studentId,
-      answers: answers,
-    );
-  }
 }

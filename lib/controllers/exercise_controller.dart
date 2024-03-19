@@ -29,67 +29,63 @@ class ExerciseController extends GetxController {
 
   var taked_exercise = TakedExercise().obs;
   var wholeExercise = WholeExercise().obs;
-EitherModel<String?> submitExerciseAnswers(BuildContext context, ExerciseSubmission exerciseSubmission) async {
-  try {
-    Dialogs.showLoadingDialog(context); // Show loading dialog
-    // Convert ExerciseSubmission object to JSON string
-    String exerciseSubmissionJson = jsonEncode(exerciseSubmission.toJson());
-  
-    // Send POST request with JSON body
-    final http.Response response = await http.post(
-      Uri.parse(Api.take_exercise),
-      headers: {'Content-Type': 'application/json'}, // Add content type header
-      body: exerciseSubmissionJson,
-    );
+  EitherModel<String?> submitExerciseAnswers(
+      BuildContext context, ExerciseSubmission exerciseSubmission) async {
+    try {
+      Dialogs.showLoadingDialog(context); // Show loading dialog
+      // Convert ExerciseSubmission object to JSON string
+      String exerciseSubmissionJson = jsonEncode(exerciseSubmission.toJson());
 
-    Navigator.pop(context); // Dismiss the loading dialog
+      // Send POST request with JSON body
+      final http.Response response = await http.post(
+        Uri.parse(Api.take_exercise),
+        headers: {
+          'Content-Type': 'application/json'
+        }, // Add content type header
+        body: exerciseSubmissionJson,
+      );
 
-    final responseData = jsonDecode(response.body);
-    
-    // Check response status code
-    if (responseData['success']) {
- 
-  // Navigate to ResultScreen and remove all previous routes from the stack
-  Result result = Result.fromMap(responseData['data']['data']);
+      Navigator.pop(context); // Dismiss the loading dialog
 
-// Navigate to ResultScreen and remove all previous routes from the stack
-  
+      final responseData = jsonDecode(response.body);
 
-// Navigate to ResultScreen and remove all routes until the home screen
-Get.offUntil(
-  GetPageRoute(
-    settings: RouteSettings(name: '/result'),
-    page: () => ResultScreen(result:result),
-  ),
-  ModalRoute.withName(HomeScreen.name),
-);
+      // Check response status code
+      if (responseData['success']) {
+        // Navigate to ResultScreen and remove all previous routes from the stack
+        Result result = Result.fromMap(responseData['data']['data']);
 
 
+        Get.offUntil(
+          GetPageRoute(
+            settings: RouteSettings(name: '/result'),
+            page: () => ResultScreen(result: result),
+          ),
+          ModalRoute.withName(HomeScreen.name),
+        );
 
-  
-  // Successful submission
-  print('Exercise answers submitted successfully');
-  return right('success');
-} else {
-  // Failed submission, handle error
-  String errorMessage = responseData['message'] ?? 'Unknown error occurred';
-  Dialogs.showErrorDialog(context, errorMessage);
-  return left(errorMessage);
-}
-  } on SocketException catch (e) {
-    Navigator.pop(context); // Dismiss the loading dialog
-    Dialogs.showErrorDialog(context, 'Network error: ${e.message}');
-    // Handle network errors
-    return left('Network error: ${e.message}');
-  } catch (error) {
-    Navigator.pop(context); // Dismiss the loading dialog
-    Dialogs.showErrorDialog(context, 'Error: $error');
-    // Handle other exceptions
-    return left('Error: $error');
+        // Successful submission
+        print('Exercise answers submitted successfully');
+        return right('success');
+      } else {
+        // Failed submission, handle error
+        String errorMessage =
+            responseData['message'] ?? 'Unknown error occurred';
+        Dialogs.showErrorDialog(context, errorMessage);
+        return left(errorMessage);
+      }
+    } on SocketException catch (e) {
+      Navigator.pop(context); // Dismiss the loading dialog
+      Dialogs.showErrorDialog(context, 'Network error: ${e.message}');
+      // Handle network errors
+      return left('Network error: ${e.message}');
+    } catch (error) {
+      Navigator.pop(context); // Dismiss the loading dialog
+      Dialogs.showErrorDialog(context, 'Error: $error');
+      // Handle other exceptions
+      return left('Error: $error');
+    }
   }
-}
-  
- 
+
   EitherModel<String?> fetchExerciseWithQuestion(
       BuildContext context, Exercise exercise) async {
     try {
