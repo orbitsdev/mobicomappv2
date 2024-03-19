@@ -26,7 +26,7 @@ class ResultController extends GetxController {
       if (responseData['success']) {
         List<dynamic> data = responseData['data'];
         List<WholeResult> fetchedResults = data.map((item) => WholeResult.fromMap(item)).toList();
-        // results.assignAll(fetchedResults);
+         results.assignAll(fetchedResults);
         isLoading.value = false; // Set isLoading to false after successfully fetching data
       } else {
         Dialogs.showErrorDialog(context, 'Something went wrong');

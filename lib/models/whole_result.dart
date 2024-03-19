@@ -2,6 +2,7 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
+
 import 'package:mobicom/models/fill_in_the_blank_question_result.dart';
 import 'package:mobicom/models/multiple_choice_question_result.dart';
 import 'package:mobicom/models/true_or_false_question.dart';
@@ -124,13 +125,102 @@ class WholeResult {
 }
 
 
-class Answer{
+class Answer {
    int? id;
    int? taked_exam_id;
    int? question_id;
    String? answer;
-   MultipleChoiceQuestionResult? multiple_question_reseult;
+   MultipleChoiceQuestionResult? multiple_question_result;
    FillInTheBlankQuestionResult? fill_in_the_blank_result;
    TrueOrFalseQuestionResult? true_or_false_question_result;
+  Answer({
+    this.id,
+    this.taked_exam_id,
+    this.question_id,
+    this.answer,
+    this.multiple_question_result,
+    this.fill_in_the_blank_result,
+    this.true_or_false_question_result,
+  });
   
+
+  Answer copyWith({
+    int? id,
+    int? taked_exam_id,
+    int? question_id,
+    String? answer,
+    MultipleChoiceQuestionResult? multiple_question_result,
+    FillInTheBlankQuestionResult? fill_in_the_blank_result,
+    TrueOrFalseQuestionResult? true_or_false_question_result,
+  }) {
+    return Answer(
+      id: id ?? this.id,
+      taked_exam_id: taked_exam_id ?? this.taked_exam_id,
+      question_id: question_id ?? this.question_id,
+      answer: answer ?? this.answer,
+      multiple_question_result: multiple_question_result ?? this.multiple_question_result,
+      fill_in_the_blank_result: fill_in_the_blank_result ?? this.fill_in_the_blank_result,
+      true_or_false_question_result: true_or_false_question_result ?? this.true_or_false_question_result,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'id': id,
+      'taked_exam_id': taked_exam_id,
+      'question_id': question_id,
+      'answer': answer,
+      'multiple_question_result': multiple_question_result?.toMap(),
+      'fill_in_the_blank_result': fill_in_the_blank_result?.toMap(),
+      'true_or_false_question_result': true_or_false_question_result?.toMap(),
+    };
+  }
+
+  factory Answer.fromMap(Map<String, dynamic> map) {
+         
+
+    return Answer(
+      id: map['id'] != null ? map['id'] as int : null,
+      taked_exam_id: map['taked_exam_id'] != null ? map['taked_exam_id'] as int : null,
+      question_id: map['question_id'] != null ? map['question_id'] as int : null,
+      answer: map['answer'] != null ? map['answer'] as String : null,
+      multiple_question_result: map['multiple_question_result'] != null ? MultipleChoiceQuestionResult.fromMap(map['multiple_question_result'] as Map<String,dynamic>) : null,
+      fill_in_the_blank_result: map['fill_in_the_blank_result'] != null ? FillInTheBlankQuestionResult.fromMap(map['fill_in_the_blank_result'] as Map<String,dynamic>) : null,
+      true_or_false_question_result: map['true_or_false_question_result'] != null ? TrueOrFalseQuestionResult.fromMap(map['true_or_false_question_result'] as Map<String,dynamic>) : null,
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory Answer.fromJson(String source) => Answer.fromMap(json.decode(source) as Map<String, dynamic>);
+
+  @override
+  String toString() {
+    return 'Answer(id: $id, taked_exam_id: $taked_exam_id, question_id: $question_id, answer: $answer, multiple_question_reseult: $multiple_question_result, fill_in_the_blank_result: $fill_in_the_blank_result, true_or_false_question_result: $true_or_false_question_result)';
+  }
+
+  @override
+  bool operator ==(covariant Answer other) {
+    if (identical(this, other)) return true;
+  
+    return 
+      other.id == id &&
+      other.taked_exam_id == taked_exam_id &&
+      other.question_id == question_id &&
+      other.answer == answer &&
+      other.multiple_question_result == multiple_question_result &&
+      other.fill_in_the_blank_result == fill_in_the_blank_result &&
+      other.true_or_false_question_result == true_or_false_question_result;
+  }
+
+  @override
+  int get hashCode {
+    return id.hashCode ^
+      taked_exam_id.hashCode ^
+      question_id.hashCode ^
+      answer.hashCode ^
+      multiple_question_result.hashCode ^
+      fill_in_the_blank_result.hashCode ^
+      true_or_false_question_result.hashCode;
+  }
 }

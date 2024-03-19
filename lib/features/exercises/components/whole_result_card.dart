@@ -58,7 +58,7 @@ class WholeResultCard extends StatelessWidget {
             SizedBox(height: 16),
             ElevatedButton(
               onPressed: () { 
-                 Get.to(()=> WholeResultScreen());
+                 Get.to(()=> WholeResultScreen(wholeresult: wholeResult,));
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.black
