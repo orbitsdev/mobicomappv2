@@ -21,6 +21,7 @@ class Api {
   static String student_exercises = "${Env.APP_URL_PRODUCTION}api/student-exercises";
   static String view_score = "${Env.APP_URL_PRODUCTION}api/view-score";
   static String add_feed_back_production = "${Env.APP_URL_PRODUCTION}api/add-feedback";
+  static String user = "${Env.APP_URL_PRODUCTION}api/user";
   
 
   

@@ -36,12 +36,12 @@ final SharedPreferences prefs = await SharedPreferences.getInstance();
 final userData = prefs.getString('user');
 
 if (userData != null) {
-  final userMap = jsonDecode(userData); 
-  
 
+  final userMap = jsonDecode(userData); 
   var authController = Get.find<AuthController>();
   var user = User.stringToModel(userMap); // Create a User object from the map
   authController.user(user); 
+  await authController.fetchUserFromApi();
   
 }
 

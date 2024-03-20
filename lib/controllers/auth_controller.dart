@@ -27,6 +27,41 @@ class AuthController extends GetxController {
     print('test');
   }
 
+ Future<User?> fetchUserFromApi() async {
+  final url = Uri.parse(Api.user); // Replace with your API endpoint
+  final token = user.value.token;
+
+
+
+  try {
+    final response = await http.get(
+      url,
+      headers: {
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    final responseData = jsonDecode(response.body);
+    if (responseData['success']) {
+        var current_token = user.value.token;
+      
+        User new_user = User.fromMap(responseData['data']);
+        new_user.token = current_token;
+        user(new_user);
+        
+        print(user.toJson());
+        print('________');
+      
+    } else {
+      throw Exception('Failed to load user data: ${response.statusCode}');
+    }
+  } catch (e) {
+    print('Error: $e');
+    return null;
+  }
+}
+
+
 EitherModel<String?> uploadProfileImage(BuildContext context, File imageFile) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     try {
@@ -43,17 +78,12 @@ EitherModel<String?> uploadProfileImage(BuildContext context, File imageFile) as
       if (responseData['success']) {
 
         print(responseData['data']);
-        // Handle successful upload
-      // Update user profile photo path or do any other necessary operations
-        // Example: authController.user.value.profilePhotoPath = responseData['data']['profile_photo_path'];
-        // Save user data to SharedPreferences if needed
-        // await prefs.setString('user', authController.user.value.toJson());
+       
 
         // Dismiss loading dialog
         Get.back();
 
-        // Navigate to the desired screen
-        // Example: Get.offAll(() => ProfileScreen(), transition: Transition.cupertino);
+        
         return right(null);
       } else {
         // Handle upload failure
