@@ -52,6 +52,16 @@ class AuthController extends GetxController {
 
           if(user.value.student_id == null){
             logoutNotAuthorize();
+            
+Fluttertoast.showToast(
+        msg: "This account is no longer enrolled.",
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0
+    );
           }
 
         print(user.toJson());
@@ -240,15 +250,6 @@ return left(errorMessage);
       await prefs.remove('token');
         await prefs.remove('user');
 
-Fluttertoast.showToast(
-        msg: "This account is no longer enrolled.",
-        toastLength: Toast.LENGTH_LONG,
-        gravity: ToastGravity.BOTTOM,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-        fontSize: 16.0
-    );
       // Navigate to the login screen
       Get.offAll(() => LoginScreen(), transition: Transition.cupertino);
     } catch (e) {

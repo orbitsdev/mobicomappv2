@@ -74,7 +74,7 @@ void main() async {
       var user = User.stringToModel(userMap);
       authController.user(user);
       await authController.fetchUserFromApi();
-
+      
      
 
     } else {
