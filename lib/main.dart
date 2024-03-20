@@ -19,6 +19,7 @@ import 'package:mobicom/middleware/auth_middleware.dart';
 import 'package:mobicom/middleware/not_login_middleware.dart';
 import 'package:mobicom/models/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
 void main() async {
@@ -39,21 +40,18 @@ void main() async {
 
 // if (userData != null) {
 
-//   final userMap = jsonDecode(userData); 
+//   final userMap = jsonDecode(userData);
 //   var authController = Get.find<AuthController>();
 //   var user = User.stringToModel(userMap); // Create a User object from the map
-//   authController.user(user); 
+//   authController.user(user);
 //   await authController.fetchUserFromApi();
-  
+
 // }
 
-
-  
 //   // final String initialRoute =userData != null ? HomeScreen.name : LoginScreen.name;
 //   final String initialRoute =BoardingScreen.name;
 
-
- final SharedPreferences prefs = await SharedPreferences.getInstance();
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
   final userData = prefs.getString('user');
 
   // Check if onboarding has been shown before
@@ -69,12 +67,16 @@ void main() async {
 
     if (userData != null) {
       // Navigate to HomeScreen if user data is available
+      
       initialRoute = HomeScreen.name;
       final userMap = jsonDecode(userData);
       var authController = Get.find<AuthController>();
       var user = User.stringToModel(userMap);
       authController.user(user);
       await authController.fetchUserFromApi();
+
+     
+
     } else {
       // Navigate to LoginScreen if user data is null
       initialRoute = LoginScreen.name;
@@ -91,6 +93,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+       builder: FToastBuilder(),
       debugShowCheckedModeBanner: false,
       title: 'GATE APP',
       theme: ThemeData(useMaterial3: true),
@@ -107,15 +110,11 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: initialRoute,
       getPages: [
-
         GetPage(
           name: BoardingScreen.name,
           page: () => BoardingScreen(),
-          middlewares: [
-
-          ],
+          middlewares: [],
         ),
-        
         GetPage(
           name: HomeScreen.name,
           page: () => HomeScreen(),

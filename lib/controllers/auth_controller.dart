@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:get/get.dart';
 
@@ -48,7 +49,11 @@ class AuthController extends GetxController {
         User new_user = User.fromMap(responseData['data']);
         new_user.token = current_token;
         user(new_user);
-        
+
+          if(user.value.student_id == null){
+            logoutNotAuthorize();
+          }
+
         print(user.toJson());
         print('________');
       
@@ -108,6 +113,7 @@ EitherModel<String?> uploadProfileImage(BuildContext context, File imageFile) as
 
 
   EitherModel<String?> login(BuildContext context, Map<String, dynamic> formData) async {
+  
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   try {
     Dialogs.showLoadingDialog(context); // Show loading dialog
@@ -116,12 +122,18 @@ EitherModel<String?> uploadProfileImage(BuildContext context, File imageFile) as
     final responseData = jsonDecode(response.body);
      
     if (responseData['success']) {
+      if(responseData['data']['data']['student_id'] != null){
       user(User.fromMap(responseData['data'] as Map<String, dynamic>));
       await prefs.setString('user', user.toJson());
       print(user.toJson());
       Get.back();
       if (user.value.token!.isNotEmpty) {
         Get.offAll(() => HomeScreen(), transition: Transition.cupertino);
+      }
+
+      }else{
+         Get.back();
+          Dialogs.showErrorDialog(context, 'This account is not yet registered for access. Please register to proceed.');
       }
 
       return right(null);
@@ -183,6 +195,42 @@ return left(errorMessage);
       Get.back();
     }
   }
+  Future<void> logoutNotAuthorize() async {
+    try {
+
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      final String? accessToken = prefs.getString('token');
+
+      if (accessToken != null) {
+        // Make API call to logout
+        final response = await http.post(
+          Uri.parse(Api.logout_production),
+          headers: {'Authorization': 'Bearer $accessToken'},
+        );
+
+        if (response.statusCode == 200) {
+          // Clear user data from SharedPreferences
+          await prefs.remove('token');
+          await prefs.remove('user');
+
+          // Navigate to the login screen
+          Get.offAll(() => LoginScreen(), transition: Transition.cupertino);
+        } else {
+          throw Exception('Failed to logout');
+        }
+      } else {
+        // No access token found, force logout locally
+        await forceLogout();
+        
+      }
+    } catch (e) {
+      
+      await forceLogout();
+    } finally {
+      // Dismiss loading dialog regardless of success or failure
+      Get.back();
+    }
+  }
 
   Future<void> forceLogout() async {
     try {
@@ -190,8 +238,17 @@ return left(errorMessage);
 
       // Clear user data from SharedPreferences
       await prefs.remove('token');
-      await prefs.remove('user');
+        await prefs.remove('user');
 
+Fluttertoast.showToast(
+        msg: "This account is no longer enrolled.",
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0
+    );
       // Navigate to the login screen
       Get.offAll(() => LoginScreen(), transition: Transition.cupertino);
     } catch (e) {
