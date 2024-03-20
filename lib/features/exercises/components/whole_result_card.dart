@@ -12,11 +12,11 @@ import 'package:get/get.dart';
 import 'package:mobicom/features/results/whole_result_screen.dart';
 import 'package:mobicom/models/whole_result.dart';
 
-
 class WholeResultCard extends StatefulWidget {
   final WholeResult wholeResult;
 
-  const WholeResultCard({Key? key, required this.wholeResult}) : super(key: key);
+  const WholeResultCard({Key? key, required this.wholeResult})
+      : super(key: key);
 
   @override
   _WholeResultCardState createState() => _WholeResultCardState();
@@ -43,73 +43,117 @@ class _WholeResultCardState extends State<WholeResultCard> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              '${widget.wholeResult.exercise_name}',
+              '${widget.wholeResult.exercise_name} lorem dasd dashdas dhasd asdhasd asdhasd ashasd',
               style: TextStyle(
-                fontSize: 20,
+                fontSize: 18,
+                // overflow: ,
                 fontWeight: FontWeight.bold,
                 color: Theme.of(context).textTheme.headline6?.color,
               ),
             ),
             SizedBox(height: 8),
-            Text(
-              'Exercise Type: ${widget.wholeResult.exercise_type}',
-              style: TextStyle(
-                fontSize: 16,
-                color: Theme.of(context).textTheme.bodyText1?.color,
-              ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      child: Text(
+                        'Type: ${widget.wholeResult.exercise_type}',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.white70,
+                        ),
+                      ),
+                    ),
+                    Text(
+                      'Date: ${widget.wholeResult.created_at}',
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.white70,
+                      ),
+                    ),
+                  ],
+                ),
+                Gap(20),
+                RichText(
+                  text: TextSpan(
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.white70,
+                    ),
+                    children: [
+                      TextSpan(
+                        text: 'Score: ',
+                      ),
+                      TextSpan(
+                        text: ' ${widget.wholeResult.total_questions}',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors
+                              .green, // You can change the color as per your preference
+                        ),
+                      ),
+                      TextSpan(
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors
+                              .green, // You can change the color as per your preference
+                        ),
+                        text: '/${widget.wholeResult.total_score}',
+                      ),
+                    ],
+                  ),
+                )
+              ],
             ),
-            SizedBox(height: 8),
-            Text(
-              'Total Questions & Score: ${widget.wholeResult.total_questions} / ${widget.wholeResult.total_score}',
-              style: TextStyle(
-                fontSize: 16,
-                color: Theme.of(context).textTheme.bodyText1?.color,
-              ),
-            ),
-            SizedBox(height: 8),
-            Text(
-              'Date: ${widget.wholeResult.created_at}',
-              style: TextStyle(
-                fontSize: 16,
-                color: Theme.of(context).textTheme.bodyText1?.color,
-              ),
-            ),
-            SizedBox(height: 16),
+            SizedBox(height: 12),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                ElevatedButton(
-                  onPressed: () {
-                    Get.to(() => WholeResultScreen(wholeresult: widget.wholeResult));
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.black,
-                    padding: EdgeInsets.symmetric(vertical: 12, horizontal: 24),
-                  ),
-                  child: Text(
-                    'View More Details',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.white,
+                SizedBox(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Get.to(() =>
+                          WholeResultScreen(wholeresult: widget.wholeResult));
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.black,
+                    ),
+                    child: Text(
+                      'View Details',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ),
-                widget.wholeResult.feed == null? ElevatedButton(
-                  onPressed: () {
-                    _showRatingDialog(context);
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.yellow.shade700,
-                    padding: EdgeInsets.symmetric(vertical: 12, horizontal: 24),
-                  ),
-                  child: Text(
-                    'Rate Difficulty',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.white,
-                    ),
-                  ),
-                ): Container(),
+                widget.wholeResult.feed == null
+                    ? ElevatedButton.icon(
+  onPressed: () {
+    _showRatingDialog(context);
+  },
+  style: ElevatedButton.styleFrom(
+    backgroundColor: Colors.yellow.shade700,
+  ),
+  icon: Icon(
+    Icons.feedback, // Icon you want to use
+    color: Colors.black,
+  ),
+  label: Text(
+    'Feed Back',
+    style: TextStyle(
+      color: Colors.black,
+    ),
+  ),
+)
+
+                    : Container(),
               ],
             ),
           ],
@@ -190,7 +234,6 @@ class _WholeResultCardState extends State<WholeResultCard> {
                 ElevatedButton(
                   onPressed: () {
                     resultcontroller.addFeedback(
-                      
                       context,
                       widget.wholeResult.id.toString(),
                       _rating.toInt(),
@@ -200,10 +243,13 @@ class _WholeResultCardState extends State<WholeResultCard> {
                   child: Text('Submit'),
                 ),
                 ElevatedButton(
+                  style: ElevatedButton.styleFrom(),
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  child: Text('Cancel'),
+                  child: Text(
+                    'Cancel',
+                  ),
                 ),
               ],
             );

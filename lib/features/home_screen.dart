@@ -37,7 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-
+        title: Text('MOBICOM',style: TextStyle(fontWeight: FontWeight.w900),),
       ),
       drawer: Drawer(
         child: ListView(
