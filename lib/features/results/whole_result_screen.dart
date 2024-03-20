@@ -16,6 +16,13 @@ class WholeResultScreen extends StatefulWidget {
 }
 
 class _WholeResultScreenState extends State<WholeResultScreen> {
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,6 +47,11 @@ class _WholeResultScreenState extends State<WholeResultScreen> {
                 widget.wholeresult.total_questions.toString()),
             _buildInfoRow('Date', 'widget.wholeresult.created_at'),
             SizedBox(height: 20),
+
+             if (widget.wholeresult.feed != null) ...[
+              _buildFeedbackSection(widget.wholeresult.feed!),
+              SizedBox(height: 20),
+            ],
             _buildSectionTitle('Answers'),
             ...widget.wholeresult.answers!.map((answer) {
               return _buildAnswerCard(answer);
@@ -80,6 +92,78 @@ class _WholeResultScreenState extends State<WholeResultScreen> {
       ),
     );
   }
+
+Widget _buildFeedbackSection(Feed feed) {
+  // Define emojis for ratings
+  Map<int, String> ratingEmojis = {
+    1: '😞',
+    2: '😕',
+    3: '😐',
+    4: '🙂'
+  };
+
+  return Container(
+    decoration: BoxDecoration(
+      color: Colors.grey[900], // Very dark background color
+      borderRadius: BorderRadius.circular(8),
+    ),
+    child: Card(
+      elevation: 2,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Padding(
+        padding: EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Feedback:',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.white, // Text color
+              ),
+            ),
+            SizedBox(height: 8),
+            ListTile(
+              contentPadding: EdgeInsets.all(0),
+              leading: Icon(
+                Icons.star,
+                color: Colors.white, // Icon color
+              ),
+              title: Row(
+                children: [
+                  Text(
+                    'Rating: ${feed.rate}',
+                    style: TextStyle(fontSize: 16, color: Colors.white), // Text color
+                  ),
+                  SizedBox(width: 8), // Add spacing between rating and emoji
+                  Text(
+                    'Emoji Rating: ${ratingEmojis[feed.rate ?? 0]}',
+                    style: TextStyle(fontSize: 16, color: Colors.white), // Text color
+                  ),
+                ],
+              ),
+            ),
+            ListTile(
+              contentPadding: EdgeInsets.all(0),
+              leading: Icon(
+                Icons.message,
+                color: Colors.white, // Icon color
+              ),
+              title: Text(
+                'Message: ${feed.message}',
+                style: TextStyle(fontSize: 16, color: Colors.white), // Text color
+              ),
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
+}
+
 
   Widget _buildAnswerCard(Answer answer) {
     String? actualQuestion;

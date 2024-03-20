@@ -32,8 +32,8 @@ class ResultController extends GetxController {
       String requestBody = jsonEncode({
         'student_id': authController.user.value.student_id,
         'taked_exam_id': exerciseId,
-        'rating': rating,
-        'feedback_message': feedbackMessage,
+        'rate': rating,
+        'message': feedbackMessage,
       });
 
       final response = await http.post(
@@ -115,7 +115,7 @@ class ResultController extends GetxController {
         results(fetchedResults);
         results.forEach((element) {
           print('_______');
-          print(element.answers);
+          print(element.feed);
           print('_______');
         });
         isLoading.value =
