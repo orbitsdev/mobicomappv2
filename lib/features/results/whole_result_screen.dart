@@ -135,12 +135,12 @@ Widget _buildFeedbackSection(Feed feed) {
               title: Row(
                 children: [
                   Text(
-                    'Rating: ${feed.rate}',
+                    'Rating: ${feed.rate ?? 'NONE'}',
                     style: TextStyle(fontSize: 16, color: Colors.white), // Text color
                   ),
                   SizedBox(width: 8), // Add spacing between rating and emoji
-                  Text(
-                    'Emoji Rating: ${ratingEmojis[feed.rate ?? 0]}',
+                 if(feed.rate != null) Text(
+                    'Emoji Rating: ${ratingEmojis[feed.rate??0]?? 'NONE' }',
                     style: TextStyle(fontSize: 16, color: Colors.white), // Text color
                   ),
                 ],
@@ -153,7 +153,7 @@ Widget _buildFeedbackSection(Feed feed) {
                 color: Colors.white, // Icon color
               ),
               title: Text(
-                'Message: ${feed.message}',
+                'Message: ${feed.message ?? 'NONE'} ',
                 style: TextStyle(fontSize: 16, color: Colors.white), // Text color
               ),
             ),

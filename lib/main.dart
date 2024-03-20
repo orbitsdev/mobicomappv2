@@ -12,6 +12,7 @@ import 'package:mobicom/features/chapters/chapter_screen.dart';
 import 'package:mobicom/features/chapters/lesson_screen.dart';
 import 'package:mobicom/features/exercises/exercises_screen.dart';
 import 'package:mobicom/features/home_screen.dart';
+import 'package:mobicom/features/onboarding/views/boarding_screen.dart';
 import 'package:mobicom/features/test_question_page.dart';
 import 'package:mobicom/middleware/auth_middleware.dart';
 import 'package:mobicom/middleware/not_login_middleware.dart';
@@ -46,6 +47,7 @@ if (userData != null) {
 }
 
 
+  // final String initialRoute =userData != null ? HomeScreen.name : LoginScreen.name;
   final String initialRoute =userData != null ? HomeScreen.name : LoginScreen.name;
 
   runApp(MyApp(initialRoute: initialRoute));
@@ -75,6 +77,13 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: initialRoute,
       getPages: [
+
+        GetPage(
+          name: BoardingScreen.name,
+          page: () => HomeScreen(),
+          middlewares: [AuthMiddleware()],
+        ),
+        
         GetPage(
           name: HomeScreen.name,
           page: () => HomeScreen(),
