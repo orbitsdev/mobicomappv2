@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:mobicom/models/whole_result.dart';
 import 'package:mobicom/widgets/mardown_viewer.dart';
 
@@ -26,15 +27,18 @@ class _WholeResultScreenState extends State<WholeResultScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-          
+            MarkdownViewer(
+                description: '${widget.wholeresult.exercise_description}'),
             SizedBox(height: 20),
             _buildSectionTitle('Exercise Details'),
-            _buildInfoRow('Exercise Name', '${widget.wholeresult.exercise_name}'),
+            _buildInfoRow(
+                'Exercise Name', '${widget.wholeresult.exercise_name}'),
             _buildInfoRow('Student Name', '${widget.wholeresult.student_name}'),
-            _buildInfoRow('Total Score', widget.wholeresult.total_score.toString()),
-            _buildInfoRow('Total Questions', widget.wholeresult.total_questions.toString()),
-            _buildInfoRow('Date', '${widget.wholeresult.created_at}'),
-              MarkdownViewer(description: '${widget.wholeresult.exercise_description}'),
+            _buildInfoRow(
+                'Total Score', widget.wholeresult.total_score.toString()),
+            _buildInfoRow('Total Questions',
+                widget.wholeresult.total_questions.toString()),
+            _buildInfoRow('Date', 'widget.wholeresult.created_at'),
             SizedBox(height: 20),
             _buildSectionTitle('Answers'),
             ...widget.wholeresult.answers!.map((answer) {
@@ -96,45 +100,173 @@ class _WholeResultScreenState extends State<WholeResultScreen> {
     }
 
     // Determine if the answer is correct
-    bool isCorrect = answer.answer!.toLowerCase() == correctAnswer!.toLowerCase();
-
-    return Card(
-      elevation: 4,
+    bool isCorrect =
+        answer.answer!.toLowerCase() == correctAnswer!.toLowerCase();
+    return Container(
       margin: EdgeInsets.symmetric(vertical: 8),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [Colors.blue.withOpacity(0.3), Colors.blue.withOpacity(0.1)],
-          ),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+        gradient: LinearGradient(
+          colors: isCorrect
+              ? [Colors.green.withOpacity(0.1), Colors.green.withOpacity(0.05)]
+              : [Colors.red.withOpacity(0.1), Colors.red.withOpacity(0.05)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
         ),
-        child: Padding(
-          padding: EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                actualQuestion ?? "",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-              ),
-              if (options != null && options.isNotEmpty)
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: options.map((option) {
-                    return Text(
-                      option,
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    );
-                  }).toList(),
+        border: Border.all(
+            color: isCorrect
+                ? Colors.green.withOpacity(0.3)
+                : Colors.red.withOpacity(0.3),
+            width: 1),
+      ),
+      child: Padding(
+        padding: EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(
+                  Icons.help_outline, // Change to your preferred icon
+                  color: isCorrect ? Colors.green : Colors.red,
                 ),
+                SizedBox(width: 8),
+                Text(
+                  'Question ${answer.question_number ?? ''}',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+            SizedBox(height: 10),
+            Text(
+              actualQuestion ?? "",
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
+            if (options != null && options.isNotEmpty) ...[
               SizedBox(height: 10),
-              _buildAnswerRow('Your Answer:', answer.answer ?? "", isCorrect ? Colors.green : Colors.red),
-              _buildAnswerRow('Actual Answer:', correctAnswer ?? "", Colors.black),
+              Text(
+                'Options:',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+              ),
+              SizedBox(height: 5),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: options.map((option) {
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 4.0),
+                    child: Row(
+                      children: [
+                        Icon(Icons.circle, size: 8, color: Colors.white),
+                        SizedBox(width: 5),
+                        Expanded(
+                            child: Text(
+                          option,
+                          style: TextStyle(fontSize: 12),
+                        )),
+                      ],
+                    ),
+                  );
+                }).toList(),
+              ),
             ],
-          ),
+            SizedBox(height: 10),
+            Container(
+              padding: EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(4),
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: isCorrect
+                      ? [
+                          Colors.green.withOpacity(0.3),
+                          Colors.green.withOpacity(0.1)
+                        ]
+                      : [
+                          Colors.red.withOpacity(0.3),
+                          Colors.red.withOpacity(0.1)
+                        ],
+                ),
+                border: Border.all(
+                  color: isCorrect
+                      ? Colors.blue.withOpacity(0.2)
+                      : Colors.red.withOpacity(0.2),
+                  width: 2,
+                ),
+              ),
+              child: Row(
+                // Using Row instead of Column to include the icon
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Icon(
+                    isCorrect ? Icons.check_circle : Icons.cancel,
+                    color: isCorrect ? Colors.green : Colors.red,
+                  ),
+                  SizedBox(width: 8), // Adjust as needed
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Your Answer',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600, // Changed to semi-bold
+                          fontSize: 12,
+                          color: isCorrect ? Colors.green : Colors.red,
+                        ),
+                      ),
+                      SizedBox(height: 4), // Adjust as needed
+                      Text(
+                        answer.answer ?? "",
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: isCorrect ? Colors.green : Colors.red,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            Gap(10),
+            Container(
+              padding: EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(4),
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Colors.white.withOpacity(0.3),
+                    Colors.white.withOpacity(0.1)
+                  ],
+                ),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Container(),
+                  Text(
+                    'Actual Answer',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600, // Changed to semi-bold
+                      fontSize: 12,
+                      color: Colors.white,
+                    ),
+                  ),
+                  SizedBox(height: 4), // Adjust as needed
+                  Text(
+                    correctAnswer ?? "",
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );
