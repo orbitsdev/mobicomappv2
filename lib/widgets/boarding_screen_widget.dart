@@ -27,7 +27,7 @@ class BoardingScreenWidget extends StatelessWidget {
                 begin: Alignment.bottomCenter,
                 end: Alignment.topCenter,
                 colors: [
-                  Colors.black.withOpacity(0.8),
+                  Colors.black.withOpacity(0.90),
                   Colors.transparent,
                 ],
               ),
@@ -40,6 +40,7 @@ class BoardingScreenWidget extends StatelessWidget {
                 Text(
                   boarding.title.toUpperCase(),
                   style: TextStyle(
+                    height: 0,
                     fontSize: 48,
     fontWeight: FontWeight.w700,
     fontStyle: FontStyle.italic,

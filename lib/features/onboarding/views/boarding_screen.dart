@@ -112,7 +112,16 @@ class _BoardingScreenState extends State<BoardingScreen> {
                 ),
               ),
                Gap(MediaQuery.of(context).size.height * 0.05),
-                SizedBox( width:double.infinity,child: ElevatedButton(onPressed: next, child: Text( isLastIndex ? 'Get Started'.toUpperCase() :'NEXT'.toUpperCase(), style:  const TextStyle(fontSize: 20,fontWeight: FontWeight.bold,  ),)
+                SizedBox( 
+                  
+                  height: 55,
+                  width:MediaQuery.of(context).size.width * 0.80,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      foregroundColor: Colors.black87,
+                      backgroundColor: Color(0xfff7d336)
+                    ),
+                    onPressed: next, child: Text( isLastIndex ? 'Get Started'.toUpperCase() :'NEXT'.toUpperCase(), style:  const TextStyle(fontSize: 20,fontWeight: FontWeight.bold,  ),)
                 )
                 ).animate().fadeIn(),
               ],

@@ -14,6 +14,7 @@ import 'package:mobicom/features/exercises/exercises_screen.dart';
 import 'package:mobicom/features/home_screen.dart';
 import 'package:mobicom/features/onboarding/views/boarding_screen.dart';
 import 'package:mobicom/features/test_question_page.dart';
+import 'package:mobicom/localdatabase/share_preference_manager.dart';
 import 'package:mobicom/middleware/auth_middleware.dart';
 import 'package:mobicom/middleware/not_login_middleware.dart';
 import 'package:mobicom/models/user.dart';
@@ -32,24 +33,53 @@ void main() async {
   // Initialize the bindings
   AppControllerBinding().dependencies();
 
-  // Check if the user is authenticated
-final SharedPreferences prefs = await SharedPreferences.getInstance();
-final userData = prefs.getString('user');
+//   // Check if the user is authenticated
+// final SharedPreferences prefs = await SharedPreferences.getInstance();
+// final userData = prefs.getString('user');
 
-if (userData != null) {
+// if (userData != null) {
 
-  final userMap = jsonDecode(userData); 
-  var authController = Get.find<AuthController>();
-  var user = User.stringToModel(userMap); // Create a User object from the map
-  authController.user(user); 
-  await authController.fetchUserFromApi();
+//   final userMap = jsonDecode(userData); 
+//   var authController = Get.find<AuthController>();
+//   var user = User.stringToModel(userMap); // Create a User object from the map
+//   authController.user(user); 
+//   await authController.fetchUserFromApi();
   
-}
+// }
 
 
-  // final String initialRoute =userData != null ? HomeScreen.name : LoginScreen.name;
-  final String initialRoute =userData != null ? HomeScreen.name : LoginScreen.name;
+  
+//   // final String initialRoute =userData != null ? HomeScreen.name : LoginScreen.name;
+//   final String initialRoute =BoardingScreen.name;
 
+
+ final SharedPreferences prefs = await SharedPreferences.getInstance();
+  final userData = prefs.getString('user');
+
+  // Check if onboarding has been shown before
+  final bool showOnBoarding = await SharedPreferencesManager.getShowOnBoarding();
+
+  String initialRoute;
+  if (!showOnBoarding) {
+    initialRoute = BoardingScreen.name;
+  } else {
+    // Check if the user data is available
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final userData = prefs.getString('user');
+
+    if (userData != null) {
+      // Navigate to HomeScreen if user data is available
+      initialRoute = HomeScreen.name;
+      final userMap = jsonDecode(userData);
+      var authController = Get.find<AuthController>();
+      var user = User.stringToModel(userMap);
+      authController.user(user);
+      await authController.fetchUserFromApi();
+    } else {
+      // Navigate to LoginScreen if user data is null
+      initialRoute = LoginScreen.name;
+    }
+  }
   runApp(MyApp(initialRoute: initialRoute));
 }
 
@@ -80,8 +110,10 @@ class MyApp extends StatelessWidget {
 
         GetPage(
           name: BoardingScreen.name,
-          page: () => HomeScreen(),
-          middlewares: [AuthMiddleware()],
+          page: () => BoardingScreen(),
+          middlewares: [
+
+          ],
         ),
         
         GetPage(
