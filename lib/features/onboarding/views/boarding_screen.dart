@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:mobicom/features/authentication/login_screen.dart';
 import 'package:mobicom/features/data/onboarding_data.dart';
 import 'package:mobicom/features/home_screen.dart';
 import 'package:mobicom/localdatabase/share_preference_manager.dart';
@@ -39,7 +40,7 @@ class _BoardingScreenState extends State<BoardingScreen> {
         _pagecontroler.nextPage(duration: const Duration(milliseconds: 600), curve: Curves.easeIn);
       }else{
         SharedPreferencesManager.setShowOnBoarding(true);
-        Get.off(()=> const HomeScreen());
+        Get.off(()=> const LoginScreen());
       }
   }
 
