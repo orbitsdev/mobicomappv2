@@ -10,6 +10,7 @@ import 'package:mobicom/features/exercises/answer_screen.dart';
 import 'package:mobicom/features/exercises/question_page.dart';
 import 'package:mobicom/features/exercises/result_screen.dart';
 import 'package:mobicom/features/home_screen.dart';
+import 'package:mobicom/features/results/whole_result_screen.dart';
 import 'package:mobicom/modals/dialogs.dart';
 import 'package:mobicom/models/Result.dart';
 import 'package:mobicom/models/exercise.dart';
@@ -19,6 +20,7 @@ import 'package:mobicom/models/multiple_choice_question.dart';
 import 'package:mobicom/models/taked_exercise.dart';
 import 'package:mobicom/models/true_or_false_question.dart';
 import 'package:mobicom/models/whole_exercise.dart';
+import 'package:mobicom/models/whole_result.dart';
 import 'package:mobicom/services/api.dart';
 import 'package:http/http.dart' as http;
 
@@ -52,13 +54,13 @@ class ExerciseController extends GetxController {
       // Check response status code
       if (responseData['success']) {
         // Navigate to ResultScreen and remove all previous routes from the stack
-        Result result = Result.fromMap(responseData['data']['data']);
+        WholeResult result = WholeResult.fromMap(responseData['data']['data']);
 
 
         Get.offUntil(
           GetPageRoute(
             settings: RouteSettings(name: '/result'),
-            page: () => ResultScreen(result: result),
+            page: () => WholeResultScreen(wholeresult: result),
           ),
           ModalRoute.withName(HomeScreen.name),
         );

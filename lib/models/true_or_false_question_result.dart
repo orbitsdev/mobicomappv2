@@ -1,24 +1,24 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
-
 class TrueOrFalseQuestionResult {
- int? id;
+  int? id;
   String? question;
   int? question_number;
-  int? correct_answer;
+  String? correct_answer;
   TrueOrFalseQuestionResult({
     this.id,
     this.question,
     this.question_number,
     this.correct_answer,
   });
+  
 
   TrueOrFalseQuestionResult copyWith({
     int? id,
     String? question,
     int? question_number,
-    int? correct_answer,
+    String? correct_answer,
   }) {
     return TrueOrFalseQuestionResult(
       id: id ?? this.id,
@@ -42,7 +42,7 @@ class TrueOrFalseQuestionResult {
       id: map['id'] != null ? map['id'] as int : null,
       question: map['question'] != null ? map['question'] as String : null,
       question_number: map['question_number'] != null ? map['question_number'] as int : null,
-      correct_answer: map['correct_answer'] != null ? map['correct_answer'] as int : null,
+      correct_answer: map['correct_answer'] != null ? map['correct_answer'] as String : null,
     );
   }
 

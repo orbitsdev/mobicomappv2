@@ -56,20 +56,40 @@ class WholeResultCard extends StatelessWidget {
               ),
             ),
             SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () { 
-                 Get.to(()=> WholeResultScreen(wholeresult: wholeResult,));
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.black
-              ),
-              child: Text(
-                'View More Details',
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.white,
+            Row(
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    Get.to(() => WholeResultScreen(wholeresult: wholeResult));
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.black,
+                  ),
+                  child: Text(
+                    'View More Details',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.white,
+                    ),
+                  ),
                 ),
-              ),
+                SizedBox(width: 8),
+                ElevatedButton(
+                  onPressed: () {
+                    // Add functionality to start feedback
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.yellow.shade700,
+                  ),
+                  child: Text(
+                    'Start Feedback',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ],
         ),
