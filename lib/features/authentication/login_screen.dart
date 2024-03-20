@@ -55,11 +55,13 @@ class _LoginScreenState extends State<LoginScreen> {
             children: [
               
               SizedBox(height: MediaQuery.of(context).size.height * 0.2),
-            // Your logo
-            // Image.asset(
-            //   'assets/logo.png', // Replace 'assets/logo.png' with your logo image path
-            //   height: 100, // Adjust height as needed
-            // ),
+           Hero(
+              tag: 'logo',
+              child: Image.asset(
+                'assets/images/logo.png', // Replace 'assets/logo.png' with your logo image path
+                height: 200, // Adjust height as needed
+              ),
+            ),
               FormBuilderTextField(
                 name: 'email',
                 decoration: InputDecoration(

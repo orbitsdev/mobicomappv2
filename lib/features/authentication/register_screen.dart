@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:get/get.dart';
@@ -70,6 +71,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
           key: _formKey,
           child: Column(
             children: [
+            Hero(
+              tag: 'logo',
+              child: Image.asset(
+                'assets/images/logo.png', // Replace 'assets/logo.png' with your logo image path
+                height: 200, // Adjust height as needed
+              ),
+            ),
               FormBuilderTextField(
                 name: 'first_name',
                 decoration:  InputDecoration(
