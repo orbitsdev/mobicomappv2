@@ -49,12 +49,25 @@ class _HomeScreenState extends State<HomeScreen> {
               padding: EdgeInsets.all(16),
               child:  UserInfoWidget(),),
             ListTile(
-              leading: Icon(Icons.logout), // Use the logout icon
-              title: Text('Logout'),
-              onTap: () {
-                // Call the logout method from the authController
-                authController.logout(context);
-              },
+  leading: Icon(
+    Icons.logout, 
+    size: 32, // Increase icon size
+    color: Colors.white, // Set color to red
+  ), 
+  title: Text(
+    'Logout',
+    style: TextStyle(
+      fontWeight: FontWeight.bold,
+      fontSize: 20, // Increase font size
+      color: Colors.white, // Set color to red
+    ),
+  ),
+  onTap: () {
+    // Call the logout method from the authController
+    authController.logout(context);
+  },
+
+
             ),
           ],
         ),

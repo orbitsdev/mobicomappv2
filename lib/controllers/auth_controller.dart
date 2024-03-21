@@ -50,23 +50,23 @@ class AuthController extends GetxController {
         new_user.token = current_token;
         user(new_user);
 
-          if(user.value.student_id == null){
-            logoutNotAuthorize();
-            
-Fluttertoast.showToast(
-        msg: "This account is no longer enrolled.",
-        toastLength: Toast.LENGTH_LONG,
-        gravity: ToastGravity.BOTTOM,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-        fontSize: 16.0
-    );
-          }
+final SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setString('user', jsonEncode(user.value.toMap()));
 
-        print(user.toJson());
-        print('________');
+      // Handle additional logic here if needed
       
+      if (user.value.student_id == null) {
+        logoutNotAuthorize();
+        Fluttertoast.showToast(
+          msg: "This account is no longer enrolled.",
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0,
+        );
+      }
     } else {
       throw Exception('Failed to load user data: ${response.statusCode}');
     }
@@ -77,49 +77,58 @@ Fluttertoast.showToast(
 }
 
 
-EitherModel<String?> uploadProfileImage(BuildContext context, File imageFile) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    try {
-      Dialogs.showLoadingDialog(context); // Show loading dialog
+Future<void> uploadProfileImage(File imageFile) async {
+  Dialogs.showUploadingToast(message: "Uploading Image");
+  try {
+    var uri = Uri.parse(Api.upload_profile_production);
+    var request = http.MultipartRequest('POST', uri);
 
-      // Create multipart request for uploading the image
-      var request = http.MultipartRequest('POST', Uri.parse(Api.upload_profile_production));
-      request.fields['user_id'] = user.value.id.toString();
-      request.files.add(await http.MultipartFile.fromPath('image', imageFile.path));
+    // Retrieve the token from your user object
+    String token = user.value.token as String;
 
-      final response = await request.send();
-      final responseData = jsonDecode(await response.stream.bytesToString());
+    // Set the Authorization header with the token
+    request.headers['Authorization'] = 'Bearer $token';
 
-      if (responseData['success']) {
+    // Rest of your code remains the same
+    request.fields['user_id'] = user.value.id.toString();
+    var stream = http.ByteStream(imageFile.openRead());
+    var length = await imageFile.length();
+    var multipartFile = http.MultipartFile(
+      'image',
+      stream,
+      length,
+      filename: imageFile.path.split('/').last,
+    );
+    request.files.add(multipartFile);
 
-        print(responseData['data']);
-       
+    var response = await request.send();
 
-        // Dismiss loading dialog
-        Get.back();
+    if (response.statusCode == 200) {
+      var responseBody = await response.stream.bytesToString();
+      var jsonResponse = jsonDecode(responseBody);
+      var imagePath = jsonResponse['data'];
+   
 
-        
-        return right(null);
-      } else {
-        // Handle upload failure
-        // Show error message or dialog
-        String errorMessage = responseData['error'] ?? 'Upload failed';
-        Dialogs.showErrorDialog(context, errorMessage);
-        return left('Upload failed');
-      }
-    } on SocketException catch (e) {
-      // Handle network error
-      Dialogs.showErrorDialog(context, e.message);
-      return left('Network error: ${e.message}');
-    } catch (e) {
-      // Handle other exceptions
-      Dialogs.showErrorDialog(context, e.toString());
-      return left('Error: ${e.toString()}');
-    } finally {
-      // Dismiss loading dialog if it's still shown
-      Get.back();
+     user.update((value){
+      value!.image = imagePath['data']; 
+});
+      
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setString('user', jsonEncode(user.value.toMap()));
+
+
+      Dialogs.showSuccesToast(message: "Image uploaded successfully.");
+      // You can now use the imagePath to display the uploaded imagep or perform further actions
+    } else {
+      Dialogs.showErrorToast(message: 'Upload failed: ${response.reasonPhrase}');
     }
+  } on SocketException catch (e) {
+    Dialogs.showErrorToast(message: 'Error: Unable to connect to the server. Please check your internet connection.');
+  } catch (e) {
+    Dialogs.showErrorToast(message: 'Error: $e');
   }
+}
+
 
 
   EitherModel<String?> login(BuildContext context, Map<String, dynamic> formData) async {

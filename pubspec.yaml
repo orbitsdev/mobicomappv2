@@ -56,7 +56,7 @@ dependencies:
   flutter_animate: ^4.5.0
   smooth_page_indicator: ^1.1.0
   fluttertoast: ^8.2.4
- 
+  image_picker: ^0.8.7+4
   # image_picker: ^0.8.8
  
 
