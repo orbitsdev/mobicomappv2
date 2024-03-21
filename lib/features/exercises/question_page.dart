@@ -82,7 +82,7 @@ class _QuestionPageState extends State<QuestionPage> {
                 right: 0,
                 child: Center(
                   child: FloatingActionButton(
-                    onPressed: () async {
+                    onPressed: widget.exercise.total_questions == 0? null:  () async {
                       // Validate the form
                       if (_formKey.currentState!.saveAndValidate()) {
                         Map<String, dynamic> formData =

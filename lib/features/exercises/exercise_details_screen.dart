@@ -81,13 +81,13 @@ class ExerciseDetailsScreen extends StatelessWidget {
           SizedBox(
             height: 55,
             child: ElevatedButton.icon(
-              onPressed: () {
+              onPressed:exercise.total_questions == 0 ?  null:   () {
                 Get.to(() => QuestionPage(exercise: exercise,));
                 // Get.to(() => TestQuestionPage());
                 // _showStartExamDialog(context);
               },
               icon: Icon(Icons.play_arrow), // You can change this to any relevant icon
-              label: Text('START'),
+              label: Text(exercise.total_questions == 0? 'NO AVAIABLE QUESTIONS' : 'START'),
             ),
           ),
         ],
