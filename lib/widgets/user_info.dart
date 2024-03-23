@@ -104,7 +104,7 @@ class UserInfoWidget extends StatelessWidget {
     ),
     Gap(10),
    Text(
-        '${authController.user.value.full_name} Maria tressa Smasom',
+        '${authController.user.value.full_name}',
         textAlign: TextAlign.center, // Center the text horizontally
         style: TextStyle(
           color: Colors.white,
