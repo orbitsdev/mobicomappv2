@@ -43,7 +43,7 @@ class _WholeResultCardState extends State<WholeResultCard> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              '${widget.wholeResult.exercise_name} lorem dasd dashdas dhasd asdhasd asdhasd ashasd',
+              '${widget.wholeResult.exercise_name}',
               style: TextStyle(
                 fontSize: 18,
                 // overflow: ,
