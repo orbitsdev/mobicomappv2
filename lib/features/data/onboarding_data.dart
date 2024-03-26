@@ -1,9 +1,8 @@
 import 'package:mobicom/models/boarding.dart';
-
 List<Boarding> boarding_data = [
   Boarding(
-    title: 'Welcome to Computing Essentials',
-    body: 'Explore computing essentials through videos, articles, and exercises - all offline!',
+    title: 'WELCOME TO INTRODUCTION TO COMPUTING',
+    body: 'Explore computing essentials through videos, articles, and exercises!',
     image: 'n1.jpg',
   ),
   Boarding(
@@ -13,7 +12,7 @@ List<Boarding> boarding_data = [
   ),
   Boarding(
     title: 'Interactive Learning',
-    body: 'Immerse yourself in an interactive learning experience offline.',
+    body: 'Immerse yourself in an interactive learning experience.',
     image: 'n3.png',
   ),
   Boarding(
@@ -27,4 +26,3 @@ List<Boarding> boarding_data = [
     image: 'n5.jpg',
   ),
 ];
-

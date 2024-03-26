@@ -45,7 +45,7 @@ class _WholeResultScreenState extends State<WholeResultScreen> {
                 'Total Score', widget.wholeresult.total_score.toString()),
             _buildInfoRow('Total Questions',
                 widget.wholeresult.total_questions.toString()),
-            _buildInfoRow('Date', 'widget.wholeresult.created_at'),
+            _buildInfoRow('Date', '${widget.wholeresult.created_at}'),
             SizedBox(height: 20),
 
              if (widget.wholeresult.feed != null) ...[
