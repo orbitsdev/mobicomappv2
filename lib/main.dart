@@ -95,7 +95,7 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
        builder: FToastBuilder(),
       debugShowCheckedModeBanner: false,
-      title: 'GATE APP',
+      title: 'MOBICOM',
       theme: ThemeData(useMaterial3: true),
       themeMode: ThemeMode.dark,
       darkTheme: ThemeData.dark().copyWith(

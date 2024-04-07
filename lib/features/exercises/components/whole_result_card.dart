@@ -89,7 +89,8 @@ class _WholeResultCardState extends State<WholeResultCard> {
                         text: 'Score: ',
                       ),
                       TextSpan(
-                        text: ' ${widget.wholeResult.total_questions}',
+                         text: '${widget.wholeResult.total_score} /',
+
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -104,7 +105,7 @@ class _WholeResultCardState extends State<WholeResultCard> {
                           color: Colors
                               .green, // You can change the color as per your preference
                         ),
-                        text: '/${widget.wholeResult.total_score}',
+                               text: ' ${widget.wholeResult.total_questions}',
                       ),
                     ],
                   ),
@@ -163,99 +164,100 @@ class _WholeResultCardState extends State<WholeResultCard> {
   }
 
   void _showRatingDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return StatefulBuilder(
-          builder: (context, setState) {
-            return AlertDialog(
-              title: Text("Rate Difficulty"),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text("Rate the difficulty of the exam:"),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Rating: ${_rating.toInt()}',
-                        style: TextStyle(fontSize: 16),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 10),
-                  RatingBar.builder(
-                    initialRating: _rating,
-                    minRating: 0,
-                    maxRating: 5,
-                    direction: Axis.horizontal,
-                    allowHalfRating: false,
-                    itemCount: 5,
-                    itemSize: 40,
-                    itemBuilder: (context, _) => Icon(
-                      _difficultyIcon,
-                      color: Colors.amber,
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return StatefulBuilder(
+        builder: (context, setState) {
+          return AlertDialog(
+            title: Text("Rate Difficulty"),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text("Rate the difficulty of the exam:"),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Rating: ${_rating.toInt()}',
+                      style: TextStyle(fontSize: 16),
                     ),
-                    onRatingUpdate: (rating) {
-                      setState(() {
-                        _rating = rating;
-                        switch (_rating.toInt()) {
-                          case 1:
-                            _difficultyIcon = Icons.sentiment_very_satisfied;
-                            break;
-                          case 2:
-                            _difficultyIcon = Icons.sentiment_satisfied;
-                            break;
-                          case 3:
-                            _difficultyIcon = Icons.sentiment_neutral;
-                            break;
-                          case 4:
-                            _difficultyIcon = Icons.sentiment_dissatisfied;
-                            break;
-                          case 5:
-                            _difficultyIcon = Icons.sentiment_very_dissatisfied;
-                            break;
-                          default:
-                            _difficultyIcon = Icons.sentiment_neutral;
-                        }
-                      });
-                    },
-                  ),
-                  SizedBox(height: 10),
-                  TextField(
-                    controller: _feedbackController,
-                    decoration: InputDecoration(
-                      labelText: 'Feedback Message',
-                    ),
-                  ),
-                ],
-              ),
-              actions: [
-                ElevatedButton(
-                  onPressed: () {
-                    resultcontroller.addFeedback(
-                      context,
-                      widget.wholeResult.id.toString(),
-                      _rating.toInt(),
-                      _feedbackController.text,
-                    );
-                  },
-                  child: Text('Submit'),
+                  ],
                 ),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(),
-                  onPressed: () {
-                    Navigator.of(context).pop();
+                SizedBox(height: 10),
+                RatingBar.builder(
+                  initialRating: _rating,
+                  minRating: 0,
+                  maxRating: 5,
+                  direction: Axis.horizontal,
+                  allowHalfRating: false,
+                  itemCount: 5,
+                  itemSize: 40,
+                  itemBuilder: (context, _) => Icon(
+                    _difficultyIcon,
+                    color: Colors.amber,
+                  ),
+                  onRatingUpdate: (rating) {
+                    setState(() {
+                      _rating = rating;
+                      switch (_rating.toInt()) {
+                        case 1:
+                          _difficultyIcon = Icons.sentiment_very_dissatisfied;
+                          break;
+                        case 2:
+                          _difficultyIcon = Icons.sentiment_dissatisfied;
+                          break;
+                        case 3:
+                          _difficultyIcon = Icons.sentiment_neutral;
+                          break;
+                        case 4:
+                          _difficultyIcon = Icons.sentiment_satisfied;
+                          break;
+                        case 5:
+                          _difficultyIcon = Icons.sentiment_very_satisfied;
+                          break;
+                        default:
+                          _difficultyIcon = Icons.sentiment_neutral;
+                      }
+                    });
                   },
-                  child: Text(
-                    'Cancel',
+                ),
+                SizedBox(height: 10),
+                TextField(
+                  controller: _feedbackController,
+                  decoration: InputDecoration(
+                    labelText: 'Feedback Message',
                   ),
                 ),
               ],
-            );
-          },
-        );
-      },
-    );
-  }
+            ),
+            actions: [
+              ElevatedButton(
+                onPressed: () {
+                  resultcontroller.addFeedback(
+                    context,
+                    widget.wholeResult.id.toString(),
+                    _rating.toInt(),
+                    _feedbackController.text,
+                  );
+                },
+                child: Text('Submit'),
+              ),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text(
+                  'Cancel',
+                ),
+              ),
+            ],
+          );
+        },
+      );
+    },
+  );
+}
+
 }

@@ -16,7 +16,6 @@ class WholeResultScreen extends StatefulWidget {
 }
 
 class _WholeResultScreenState extends State<WholeResultScreen> {
-
   @override
   void initState() {
     // TODO: implement initState
@@ -47,8 +46,7 @@ class _WholeResultScreenState extends State<WholeResultScreen> {
                 widget.wholeresult.total_questions.toString()),
             _buildInfoRow('Date', '${widget.wholeresult.created_at}'),
             SizedBox(height: 20),
-
-             if (widget.wholeresult.feed != null) ...[
+            if (widget.wholeresult.feed != null) ...[
               _buildFeedbackSection(widget.wholeresult.feed!),
               SizedBox(height: 20),
             ],
@@ -92,77 +90,149 @@ class _WholeResultScreenState extends State<WholeResultScreen> {
       ),
     );
   }
-
 Widget _buildFeedbackSection(Feed feed) {
-  // Define emojis for ratings
+  // Define emojis and descriptions for ratings
   Map<int, String> ratingEmojis = {
-    1: '😞',
-    2: '😕',
-    3: '😐',
-    4: '🙂'
+    1: '😫', // Difficulty
+    2: '😕', // Moderately difficult
+    3: '😐', // Moderate
+    4: '😊', // Moderately easy
+    5: '🙂', // Easy
   };
 
+  // Determine rating emoji and description
+  String ratingEmoji = ratingEmojis[feed.rate ?? 3] ?? '😐'; // Default to moderate
+  String ratingDescription = '';
+  switch (feed.rate) {
+    case 1:
+      ratingDescription = 'Difficulty';
+      break;
+    case 2:
+      ratingDescription = 'Moderately difficult';
+      break;
+    case 3:
+      ratingDescription = 'Moderate';
+      break;
+    case 4:
+      ratingDescription = 'Moderately easy';
+      break;
+    case 5:
+      ratingDescription = 'Easy';
+      break;
+    default:
+      ratingDescription = 'Moderate';
+  }
+
   return Container(
+    margin: EdgeInsets.symmetric(vertical: 8),
+    padding: EdgeInsets.all(16),
     decoration: BoxDecoration(
-      color: Colors.grey[900], // Very dark background color
-      borderRadius: BorderRadius.circular(8),
-    ),
-    child: Card(
-      elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
+      borderRadius: BorderRadius.circular(12),
+      gradient: LinearGradient(
+        colors: [Color(0xFF0050AC), Color(0xFF3E7BCE)],
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
       ),
-      child: Padding(
-        padding: EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+      boxShadow: [
+        BoxShadow(
+          color: Colors.black.withOpacity(0.3),
+          blurRadius: 8,
+          offset: Offset(0, 4),
+        ),
+      ],
+    ),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Center(
+          child: Text(
+            'Feedback',
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
+          ),
+        ),
+         Divider(
+      color: Colors.white,
+      thickness: 2,
+      indent: 20,
+      endIndent: 20,
+    ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              'Feedback:',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.white, // Text color
-              ),
+              ratingEmoji,
+              style: TextStyle(fontSize: 38),
             ),
-            SizedBox(height: 8),
-            ListTile(
-              contentPadding: EdgeInsets.all(0),
-              leading: Icon(
-                Icons.star,
-                color: Colors.white, // Icon color
-              ),
-              title: Row(
-                children: [
-                  Text(
-                    'Rating: ${feed.rate ?? 'NONE'}',
-                    style: TextStyle(fontSize: 16, color: Colors.white), // Text color
-                  ),
-                  SizedBox(width: 8), // Add spacing between rating and emoji
-                 if(feed.rate != null) Text(
-                    'Emoji Rating: ${ratingEmojis[feed.rate??0]?? 'NONE' }',
-                    style: TextStyle(fontSize: 16, color: Colors.white), // Text color
-                  ),
-                ],
-              ),
-            ),
-            ListTile(
-              contentPadding: EdgeInsets.all(0),
-              leading: Icon(
-                Icons.message,
-                color: Colors.white, // Icon color
-              ),
-              title: Text(
-                'Message: ${feed.message ?? 'NONE'} ',
-                style: TextStyle(fontSize: 16, color: Colors.white), // Text color
-              ),
-            ),
+         
+            // SizedBox(width: 16),
+            // Column(
+            //   children: [
+            //     Text(
+            //       'Rating:',
+            //       style: TextStyle(fontSize: 18, color: Colors.white),
+            //     ),
+            //     SizedBox(height: 8),
+            //     Container(
+            //       width: 60,
+            //       height: 60,
+            //       alignment: Alignment.center,
+            //       decoration: BoxDecoration(
+            //         shape: BoxShape.circle,
+            //         border: Border.all(color: Colors.white, width: 2),
+            //       ),
+            //       child: Text(
+            //         '${feed.rate ?? 'NONE'}',
+            //         style: TextStyle(fontSize: 24, color: Colors.white),
+            //       ),
+            //     ),
+            //   ],
+            // ),
           ],
         ),
-      ),
+
+           Center(
+             child: Text(
+                ratingDescription.toUpperCase(),
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+           ),
+            Gap(10),
+       Container(
+        padding: EdgeInsets.all(8),
+        width: MediaQuery.of(context).size.width,
+  decoration: BoxDecoration(
+ 
+    gradient: LinearGradient(
+      colors: [Color.fromARGB(175, 2, 85, 180), Color.fromARGB(255, 18, 95, 202)],
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+    ),
+  ),
+  child: Text(
+    '${feed.message ?? 'NONE'} ',
+    style: TextStyle(fontSize: 14, color: Colors.white),
+  ),
+),
+
+        // SizedBox(height: 16),
+        // Container(
+        //   margin: EdgeInsets.symmetric(vertical: 16),
+        //   padding: EdgeInsets.all(16),
+        //   decoration: BoxDecoration(
+        //     borderRadius: BorderRadius.circular(12),
+        //     border: Border.all(color: Colors.white, width: 2),
+        //   ),
+        //   child: Text(
+        //     'Message: ${feed.message ?? 'NONE'}',
+        //     style: TextStyle(fontSize: 18, color: Colors.white),
+        //     textAlign: TextAlign.center,
+        //   ),
+        // ),
+      ],
     ),
   );
 }
+
 
 
   Widget _buildAnswerCard(Answer answer) {
