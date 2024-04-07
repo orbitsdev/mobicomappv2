@@ -67,6 +67,18 @@ final SharedPreferences prefs = await SharedPreferences.getInstance();
           fontSize: 16.0,
         );
       }
+      if (user.value.teacher_full_name == null) {
+        logoutNotAuthorize();
+        Fluttertoast.showToast(
+          msg: "This account is doesnt have teacher.",
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0,
+        );
+      }
     } else {
       throw Exception('Failed to load user data: ${response.statusCode}');
     }
